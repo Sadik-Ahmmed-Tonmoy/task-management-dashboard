@@ -112,7 +112,7 @@ const ComponentsDashboardAddTask = () => {
                 <div className="relative text-white-dark">
                     <input type="text" {...register('category')} placeholder="Your category" className="form-input ps-10 placeholder:text-white-dark" />
                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                    <MdOutlineCategory />    
+                    <MdOutlineCategory />       
                     </span>
                 </div>
                 {errors.avatar && <span className="text-red-500">{errors.avatar.message}</span>}
