@@ -104,7 +104,7 @@ const Sidebar = () => {
                     </div>
                     <PerfectScrollbar className="relative h-[calc(100vh-80px)]">
                         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
-                            <li className="menu nav-item">
+                            {/* <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'dashboard' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('dashboard')}>
                                     <div className="flex items-center">
                                         <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
@@ -120,6 +120,35 @@ const Sidebar = () => {
                                     <ul className="sub-menu text-gray-500">
                                         <li>
                                             <Link href="/">{t('sales')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/analytics">{t('analytics')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/finance">{t('finance')}</Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/crypto">{t('crypto')}</Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li> */}
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'adminDashboard' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('adminDashboard')}>
+                                    <div className="flex items-center">
+                                        <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Admin Dashboard')}</span>
+                                    </div>
+
+                                    <div className={currentMenu !== 'adminDashboard' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'adminDashboard' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <Link href="/add-task">{t('Add Task')}</Link>
                                         </li>
                                         <li>
                                             <Link href="/analytics">{t('analytics')}</Link>
