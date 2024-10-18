@@ -38,7 +38,6 @@ const taskApi = baseApi.injectEndpoints({
         }),
         deleteTask: builder.mutation({
             query: (id) => {
-                console.log("id", id);
                 return {
                     url: `task/${id}`,
                     method: 'DELETE',
@@ -50,4 +49,4 @@ const taskApi = baseApi.injectEndpoints({
     }),
 });
 
-export const {  useGetAllTasksQuery, useGetSingleTaskQuery, useCreateTaskMutation, useUpdateTaskMutation, useDeleteTaskMutation } = taskApi;
+export const { useGetAllTasksQuery, useGetSingleTaskQuery, useCreateTaskMutation, useUpdateTaskMutation, useDeleteTaskMutation } = taskApi;

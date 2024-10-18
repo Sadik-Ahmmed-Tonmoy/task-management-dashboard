@@ -32,25 +32,10 @@ const ComponentsDashboardAllTask = () => {
     const { data: trainersData, isError, error, isLoading } = useGetAllTasksQuery(undefined);
     const [deleteTaskMutation] = useDeleteTaskMutation();
 
-    // const handleDelete = async (id) => {
-    //     console.log(id);
-    //     // Swal.fire({
-    //     //     title: 'Are you sure?',
-    //     //     text: 'You will not be able to recover this task!',
-    //     //     icon: 'warning',
-    //     //     showCancelButton: true,
-    //     //     confirmButtonColor: '#3085d6',
-    //     //     cancelButtonColor: '#d33',
-    //     //     confirmButtonText: 'Yes, delete it!',
-    //     // }).then((result) => {
-    //     //     if (result.isConfirmed) {
-    //     //         deleteTaskMutation(id);
-    //     //         Swal.fire('Deleted!', 'Your task has been deleted.','success');
-    //     //     }
-    //     // });
-    // }
 
-    const handleDelete = async (id: number) => {
+
+    const handleDelete = async (id: string) => {
+     
         try {
             const result = await Swal.fire({
                 title: 'Are you sure?',
@@ -58,25 +43,26 @@ const ComponentsDashboardAllTask = () => {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Log out!',
+                confirmButtonText: "Yes, delete it!",
             });
 
             if (result.isConfirmed) {
                 deleteTaskMutation(id);
-
-                // Optionally refetch user data to clear cached data
-                // await refetch();
-
                 // Show a confirmation message
                 await Swal.fire({
-                    title: 'Logged Out!',
-                    icon: 'success',
-                    timer: 1500,
-                    showConfirmButton: false,
+                    title: "Deleted!",
+                    text: "Your task has been deleted.",
+                    icon: "success",
                 });
             }
         } catch (error) {
-            console.error('Error during logout:', error);
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Failed to create task',
+                text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
+                showConfirmButton: true,
+            });
         }
     };
 
@@ -102,7 +88,7 @@ const ComponentsDashboardAllTask = () => {
                 <>
                     {trainersData?.success && (
                         <>
-                            <div className="container mx-auto p-6">
+                            <div className="container mx-auto ">
                                 <h1 className="mb-6 text-3xl font-bold">Tasks</h1>
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                                     {trainersData?.data?.map((task: TTask) => (
@@ -132,8 +118,8 @@ const ComponentsDashboardAllTask = () => {
                                             <ul className="list-disc pl-5">
                                                 {task.steps.map((step) => (
                                                     <li key={step.stepNumber}>
-                                                        {step.description} -{' '}
-                                                        <span className={step.isCompleted ? 'text-green-600' : 'text-red-600'}>{step.isCompleted ? 'Completed' : 'Not Completed'}</span>
+                                                        {step.description}
+                                                         {/* - <span className={step.isCompleted ? 'text-green-600' : 'text-red-600'}>{step.isCompleted ? 'Completed' : 'Not Completed'}</span> */}
                                                     </li>
                                                 ))}
                                             </ul>

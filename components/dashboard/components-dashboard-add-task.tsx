@@ -101,7 +101,7 @@ const router = useRouter()
                 });
             }
         } catch (e) {
-            console.error('Error creating task', e);
+          
             Swal.fire({
                 position: 'top-end',
                 icon: 'error',
@@ -198,16 +198,16 @@ const router = useRouter()
                         <div>
                             <label>Steps</label>
                             {fields.map((item, index) => (
-                                <div key={item.id} className="mb-3 flex items-center gap-2">
-                                    <input type="number" {...register(`steps.${index}.stepNumber`)} placeholder="Step Number" className="form-input w-1/4" />
+                                <div key={item.id} className="mb-3 flex flex-col sm:flex-row sm:items-center gap-2">
+                                    <input type="number" {...register(`steps.${index}.stepNumber`)} placeholder="Step Number" className="form-input sm:w-1/4" />
                                     {/* Display error for stepNumber */}
                                     {errors.steps?.[index]?.stepNumber && <span className="text-red-500">{errors.steps[index]?.stepNumber?.message}</span>}
-                                    <input type="text" {...register(`steps.${index}.description`)} placeholder="Description" className="form-input w-1/2" />
+                                    <input type="text" {...register(`steps.${index}.description`)} placeholder="Description" className="form-input sm:w-1/2" />
                                     {/* Display error for description */}
                                     {errors.steps?.[index]?.description && <span className="text-red-500">{errors.steps[index]?.description?.message}</span>}
 
-                                    <div className="flex flex-col items-center justify-center">
-                                        <label htmlFor="Completed">Completed ?</label>
+                                    <div className="flex flex-col sm:items-center sm:justify-center">
+                                        <label htmlFor="Completed" className='whitespace-nowrap'>Completed ?</label>
                                         <input type="checkbox" {...register(`steps.${index}.isCompleted`)} className="form-checkbox" />
                                         {/* Display error for isCompleted (if needed, though a checkbox rarely has errors) */}
                                         {errors.steps?.[index]?.isCompleted && <span className="text-red-500">{errors.steps[index]?.isCompleted?.message}</span>}

@@ -50,8 +50,6 @@ const ComponentsAuthLoginForm = () => {
         try {
             const res = await login(formData).unwrap();
             if (res.success) {
-                console.log('Login Successful:', res.data);
-
                 // Save the token to localStorage
                 await addTokenToLocalStorage(res?.data?.accessToken);
 
@@ -63,26 +61,24 @@ const ComponentsAuthLoginForm = () => {
                     showConfirmButton: false,
                     timer: 2500,
                 });
-
-                // Set a flag in localStorage to indicate a successful login
-                // localStorage.setItem("redirectAfterReload", "true");
-
-                // Refetch user data after successful login
-                // await refetch();
-
-                // Reload the page to trigger the refetch with authorization header
-                // setTimeout(() => {
-                //   window.location.reload();
-                //  }, 500);
-
-                // reset(); // Reset the form after submission
-
                 router.push('/');
             } else {
-                console.log('Login Failed:', res.error);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Failed to create task',
+                    text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
+                    showConfirmButton: true,
+                });
             }
         } catch (e) {
-            console.error('Error during login:', e);
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Failed to create task',
+                text: (e as any)?.data?.success === false && (e as any)?.data?.errorSources[0]?.message,
+                showConfirmButton: true,
+            });
         }
     };
 
