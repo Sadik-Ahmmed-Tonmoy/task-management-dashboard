@@ -1,8 +1,7 @@
 'use client';
-import { useCreateTaskMutation } from '@/redux/features/task/taskApi';
+import { useCreateTaskMutation, useGetSingleTaskQuery, useUpdateTaskMutation } from '@/redux/features/task/taskApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-
 import { useEffect } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { CgDetailsMore } from 'react-icons/cg';
@@ -15,13 +14,11 @@ import Swal from 'sweetalert2';
 import { z } from 'zod';
 
 // Zod schema for extreme validation
-// Zod schema for extreme validation
 const stepSchema = z.object({
     stepNumber: z
-        .string()
-        .nonempty('User level is required (Number Only)')
+        .number()
         .transform((val) => Number(val)) // Transform string to number
-        .refine((val) => Number.isInteger(val) && val > 0, 'User level must be a positive integer'),
+        .refine((val) => Number.isInteger(val) && val > 0, 'User level must be a positive number'),
     description: z.string().nonempty('Description is required'),
     isCompleted: z.boolean(),
 });
@@ -33,6 +30,7 @@ const formSchema = z.object({
     subTitle: z.string().nonempty('Subtitle is required'),
     points: z
         .string()
+        .nonempty('Points are required (Number Only)')
         .transform((val) => Number(val)) // Transform string to number
         .refine((val) => val > 0, 'Points must be a positive number'),
     userLevel: z
@@ -46,9 +44,12 @@ const formSchema = z.object({
 // Type inference for form values from the schema
 type FormData = z.infer<typeof formSchema>;
 
-const ComponentsDashboardAddTask = () => {
-    const [createTaskMutation, { isError, error, isLoading }] = useCreateTaskMutation();
-const router = useRouter()
+const ComponentsDashboardUpdateTask = ({ id }: { id: string }) => {
+    const router = useRouter();
+    const [updateTaskMutation, { isError, error, isLoading }] = useUpdateTaskMutation();
+    const { data } = useGetSingleTaskQuery(id);
+
+
     useEffect(() => {
         if (isError) {
             Swal.fire({
@@ -66,20 +67,45 @@ const router = useRouter()
         handleSubmit,
         control,
         reset,
+        setValue,
         formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(formSchema),
     });
-
     // useFieldArray for dynamic steps
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'steps',
     });
 
-    const handleCreateTask = async (formData: FieldValues) => {
+    // Populate form with fetched data
+    useEffect(() => {
+        if (data) {
+            remove();
+            // Set the form values using setValue
+            setValue('avatar', data?.data?.avatar);
+            setValue('category', data?.data?.category);
+            setValue('title', data?.data?.title);
+            setValue('subTitle', data?.data?.subTitle);
+            setValue('points', data?.data?.points?.toString()); // Ensure it's a string for the input
+            setValue('userLevel', data?.data?.userLevel?.toString()); // Ensure it's a string for the input
+            setValue('detail', data?.data?.detail);
+            // Set steps if available
+             // Set steps if available
+        if (data?.data?.steps && data.data.steps.length > 0) {
+            data.data.steps.forEach((step: any) => {
+                append(step); // Add each step to the form
+            });
+        }
+        }
+    }, [data, setValue]);
+
+    const handleUpdateTask = async (formData: FieldValues) => {
+        formData.id = id
+
+        console.log(formData);
         try {
-            const res = await createTaskMutation(formData).unwrap();
+            const res = await updateTaskMutation(formData).unwrap();
             if (res.success) {
                 // Show success message
                 Swal.fire({
@@ -90,12 +116,12 @@ const router = useRouter()
                     timer: 2500,
                 });
                 reset();
-                router.push('/task/all');
+                router.push('/task/all'); // Redirect to tasks page
             } else {
                 Swal.fire({
                     position: 'top-end',
                     icon: 'error',
-                    title: 'Failed to create task',
+                    title: 'Failed to update task',
                     text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
                     showConfirmButton: true,
                 });
@@ -105,7 +131,7 @@ const router = useRouter()
             Swal.fire({
                 position: 'top-end',
                 icon: 'error',
-                title: 'Failed to create task',
+                title: 'Failed to update task',
                 text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
                 showConfirmButton: true,
             });
@@ -119,7 +145,7 @@ const router = useRouter()
                     <ReactLoading type={'bars'} color={'#4361ee'} height={'5%'} width={'5%'} className="mx-auto" />
                 </div>
             ) : (
-                <form className="space-y-5 dark:text-white " onSubmit={handleSubmit(handleCreateTask)}>
+                <form className="space-y-5 dark:text-white " onSubmit={handleSubmit(handleUpdateTask)}>
                     <div className="mx-auto md:max-w-[60%]">
                         <div className="mb-3">
                             <label htmlFor="avatar">Avatar</label>
@@ -199,7 +225,15 @@ const router = useRouter()
                             <label>Steps</label>
                             {fields.map((item, index) => (
                                 <div key={item.id} className="mb-3 flex items-center gap-2">
-                                    <input type="number" {...register(`steps.${index}.stepNumber`)} placeholder="Step Number" className="form-input w-1/4" />
+                                    <input
+                                        type="number" // Change to text
+                                        {...register(`steps.${index}.stepNumber`, {
+                                            // Parse the value to number during submission
+                                            setValueAs: (value) => Number(value),
+                                        })}
+                                        placeholder="Step Number"
+                                        className="form-input w-1/4"
+                                    />
                                     {/* Display error for stepNumber */}
                                     {errors.steps?.[index]?.stepNumber && <span className="text-red-500">{errors.steps[index]?.stepNumber?.message}</span>}
                                     <input type="text" {...register(`steps.${index}.description`)} placeholder="Description" className="form-input w-1/2" />
@@ -217,6 +251,7 @@ const router = useRouter()
                                     </button>
                                 </div>
                             ))}
+
                             <button
                                 type="button"
                                 onClick={() =>
@@ -244,4 +279,4 @@ const router = useRouter()
     );
 };
 
-export default ComponentsDashboardAddTask;
+export default ComponentsDashboardUpdateTask;

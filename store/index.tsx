@@ -15,19 +15,32 @@ const rootReducer = combineReducers({
     [baseApi.reducerPath]: baseApi.reducer,
 });
 
-export default configureStore({
+// export default configureStore({
+//     reducer: rootReducer,
+//     middleware: (getDefaultMiddlewares) =>
+//         getDefaultMiddlewares({
+//             serializableCheck: {
+//                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+//             },
+//         }).concat(baseApi.middleware),
+    
+// });
+
+export const makeStore = () => {
+  return configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddlewares) =>
-        getDefaultMiddlewares({
-            serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-            },
-        }).concat(baseApi.middleware),
-    
-});
+      getDefaultMiddlewares({
+          serializableCheck: {
+              ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+          },
+      }).concat(baseApi.middleware),
+  })
+}
 
 export type IRootState = ReturnType<typeof rootReducer>;
-export type AppStore = ReturnType<typeof configureStore>
+export type AppStore = ReturnType<typeof makeStore>
+// export type AppStore = ReturnType<typeof configureStore>
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<AppStore['getState']>
 export type AppDispatch = AppStore['dispatch']
