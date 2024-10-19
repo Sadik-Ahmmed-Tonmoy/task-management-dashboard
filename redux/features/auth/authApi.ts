@@ -30,6 +30,13 @@ const authApi = baseApi.injectEndpoints({
             }),
             providesTags: ['User'],
         }),
+       getAllUsers: builder.query({
+        query: ({ current, limit }) => ({
+            url: `users?page=${current}&limit=${limit}`,
+            method: 'GET',
+        }),
+        providesTags: ['User'],
+    }),
         updateUser: builder.mutation({
             query: (userInfo) => {
                 return {
@@ -43,4 +50,4 @@ const authApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useGetUserDataQuery, useUpdateUserMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useGetUserDataQuery, useGetAllUsersQuery, useUpdateUserMutation } = authApi;
