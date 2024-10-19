@@ -149,6 +149,9 @@ const Sidebar = () => {
                                 <AnimateHeight duration={300} height={currentMenu === 'adminDashboard' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
+                                            <Link href="/users/all">{t('All Users')}</Link>
+                                        </li>
+                                        <li>
                                             <Link href="/task/all">{t('All Tasks')}</Link>
                                         </li>
                                         <li>
