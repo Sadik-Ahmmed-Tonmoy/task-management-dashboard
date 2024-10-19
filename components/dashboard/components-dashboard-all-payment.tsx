@@ -1,6 +1,6 @@
 'use client';
 import StatusBadge from '@/app/(defaults)/components/StatusBadge';
-import { useGetAllPaymentsHistoryQuery, usePaymentStatusUpdateMutation } from '@/redux/features/payment/paymentApi';
+import { useGetAllPaymentsHistoryQuery, usePaymentStatusApproveMutation, usePaymentStatusRejectMutation } from '@/redux/features/payment/paymentApi';
 import Link from 'next/link';
 import ReactLoading from 'react-loading';
 import Swal from 'sweetalert2';
@@ -18,7 +18,8 @@ interface TPaymentRequest {
 
 const ComponentsDashboardAllPayment = () => {
     const { data, isLoading } = useGetAllPaymentsHistoryQuery(undefined);
-    const [paymentStatusUpdateMutation] = usePaymentStatusUpdateMutation();
+    const [paymentStatusApproveMutation] = usePaymentStatusApproveMutation();
+    const [paymentStatusRejectMutation] = usePaymentStatusRejectMutation();
 
     const handleApprovePayment = async (id: string) => {
         try {
@@ -32,7 +33,7 @@ const ComponentsDashboardAllPayment = () => {
             });
 
             if (result.isConfirmed) {
-                const res = await paymentStatusUpdateMutation(id).unwrap();
+                const res = await paymentStatusApproveMutation(id).unwrap();
                 console.log(res);
                 await Swal.fire({
                     title: 'Approved!',
@@ -45,6 +46,36 @@ const ComponentsDashboardAllPayment = () => {
                 position: 'top-end',
                 icon: 'error',
                 title: 'Failed to create task',
+                text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
+                showConfirmButton: true,
+            });
+        }
+    };
+    const handleRejectPayment = async (id: string) => {
+        try {
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reject it!',
+            });
+
+            if (result.isConfirmed) {
+                const res = await paymentStatusRejectMutation(id).unwrap();
+                console.log(res);
+                await Swal.fire({
+                    title: 'Rejected!',
+                    text: res?.message,
+                    icon: 'success',
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Failed to update task',
                 text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
                 showConfirmButton: true,
             });
@@ -98,7 +129,7 @@ const ComponentsDashboardAllPayment = () => {
                                     <button onClick={() => handleApprovePayment(request?._id)} className="mr-2 rounded bg-green-500 px-4 py-2 text-white">
                                         Approve
                                     </button>
-                                    <button className="rounded bg-red-500 px-4 py-2 text-white">Reject</button>
+                                    <button onClick={() => handleRejectPayment(request?._id)} className="rounded bg-red-500 px-4 py-2 text-white">Reject</button>
                                 </td>
                             </tr>
                         ))}

@@ -1,6 +1,6 @@
 'use client';
 import StatusBadge from '@/app/(defaults)/components/StatusBadge';
-import { useGetAllPendingPaymentsQuery, usePaymentStatusUpdateMutation } from '@/redux/features/payment/paymentApi';
+import { useGetAllPendingPaymentsQuery, usePaymentStatusApproveMutation } from '@/redux/features/payment/paymentApi';
 import Link from 'next/link';
 import ReactLoading from 'react-loading';
 import Swal from 'sweetalert2';
@@ -18,7 +18,7 @@ interface TPaymentRequest {
 
 const ComponentsDashboardAllPendingPayment = () => {
     const { data, isLoading } = useGetAllPendingPaymentsQuery(undefined);
-    const [paymentStatusUpdateMutation] = usePaymentStatusUpdateMutation();
+    const [paymentStatusApproveMutation] = usePaymentStatusApproveMutation();
 
     const handleApprovePayment = async (id: string) => {
         try {
@@ -32,7 +32,7 @@ const ComponentsDashboardAllPendingPayment = () => {
             });
 
             if (result.isConfirmed) {
-                const res = await paymentStatusUpdateMutation(id).unwrap();
+                const res = await paymentStatusApproveMutation(id).unwrap();
                 console.log(res);
                 await Swal.fire({
                     title: 'Approved!',
@@ -61,16 +61,13 @@ const ComponentsDashboardAllPendingPayment = () => {
 
     return (
         <div>
-       
-
             <div className="flex items-center justify-between">
                 <div></div>
-                <h3 className='text-center text-3xl my-3'>Pending Payments</h3>
-                
-                 <Link href={"/payment"}>
-                 <button className="btn-primary mr-2 rounded px-4 py-2 cursor-pointer text-white">All Payments</button>
-                 </Link>
-                
+                <h3 className="my-3 text-center text-3xl">Pending Payments</h3>
+
+                <Link href={'/payment'}>
+                    <button className="btn-primary mr-2 cursor-pointer rounded px-4 py-2 text-white">All Payments</button>
+                </Link>
             </div>
             <table className="min-w-full border-collapse border">
                 <thead>

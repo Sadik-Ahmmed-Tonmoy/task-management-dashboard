@@ -16,10 +16,20 @@ const paymentApi = baseApi.injectEndpoints({
             }),
             providesTags: ['Payment'],
         }),
-        paymentStatusUpdate: builder.mutation({
+        paymentStatusApprove: builder.mutation({
             query: (id) => {
                 return {
                     url: `payment/approved/${id}`,
+                    method: 'POST',
+                    // body: data,
+                };
+            },
+            invalidatesTags: ['Payment'],
+        }),
+        paymentStatusReject: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `payment/reject/${id}`,
                     method: 'POST',
                     // body: data,
                 };
@@ -66,4 +76,4 @@ const paymentApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useGetAllPaymentsHistoryQuery, useGetAllPendingPaymentsQuery, usePaymentStatusUpdateMutation } = paymentApi;
+export const { useGetAllPaymentsHistoryQuery, useGetAllPendingPaymentsQuery, usePaymentStatusApproveMutation, usePaymentStatusRejectMutation } = paymentApi;
