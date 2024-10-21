@@ -31,8 +31,8 @@ const authApi = baseApi.injectEndpoints({
             providesTags: ['User'],
         }),
        getAllUsers: builder.query({
-        query: ({ current, limit }) => ({
-            url: `users?page=${current}&limit=${limit}`,
+        query: ({ page, pageSize }) => ({
+            url: `users?page=${page}&limit=${pageSize}`,
             method: 'GET',
         }),
         providesTags: ['User'],
