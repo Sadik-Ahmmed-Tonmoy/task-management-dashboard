@@ -9,28 +9,28 @@ const StatusBadge: React.FC<Props> = ({ status, isActive }) => {
 
   // Handle isActive first, as it might be more specific than status
   if (isActive !== undefined) {
-    color = isActive ? 'bg-green-500' : 'bg-red-500'; // Green for active, red for inactive
+    color = isActive ? 'border-green-500 text-green-500 ' : 'border-red-500 text-red-500'; // Green for active, red for inactive
     label = isActive ? 'ACTIVE' : 'INACTIVE';
   } else if (status) {
     // Handle status-based coloring
     switch (status) {
       case 'pending':
-        color = 'bg-yellow-500';
+        color = 'border-yellow-500 text-yellow-500';
         break;
       case 'approved':
-        color = 'bg-green-500';
+        color = 'border-green-500 text-green-500';
         break;
       case 'rejected':
-        color = 'bg-red-500';
+        color = 'border-red-500 text-red-500';
         break;
       default:
-        color = 'bg-gray-500';
+        color = 'border-gray-500 text-gray-500';
     }
     label = status.toUpperCase();
   }
 
   return (
-    <span className={`text-white px-3 py-1 rounded ${color}`}>
+    <span className={` px-3 py-1 rounded badge  ${color}`}>
       {label}
     </span>
   );

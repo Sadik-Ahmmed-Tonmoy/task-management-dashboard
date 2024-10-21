@@ -92,7 +92,7 @@ const ComponentsDashboardAllTask = () => {
                                 <h1 className="mb-6 text-3xl font-bold">Tasks</h1>
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                                     {trainersData?.data?.map((task: TTask) => (
-                                        <div key={task._id} className="rounded-lg bg-white p-4 shadow-md">
+                                        <div key={task._id} className="rounded-lg bg-white dark:bg-[#0e1726] p-4 shadow-md">
                                             <div className="flex items-center justify-between">
                                                 <Image src={task.avatar} alt={task.title} width={500} height={500} className="mb-2 h-10 w-10 rounded-full bg-red-500" />
                                                 <div className="flex items-center gap-3">

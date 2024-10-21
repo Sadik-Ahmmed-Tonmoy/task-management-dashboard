@@ -5,11 +5,12 @@ import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 import { useGetAllUsersQuery } from '@/redux/features/auth/authApi';
 import ComponentsDatatablesAdvanced from '@/components/datatables/components-datatables-advanced';
+import TableForAllUsers from '@/components/components/tableForAllUsers/tableForAllUsers';
 
 const AllUserPage = () => {
-    // const [current, setCurrent] = useState(1);
-    // const [limit, setLimit] = useState(10); // Default limit is 10
-
+    const [page, setCurrent] = useState(1);
+    const [pageSize, setLimit] = useState(10); // Default limit is 10
+    const { data, error, isLoading, isSuccess } = useGetAllUsersQuery({ page, pageSize });
     // const onChange: PaginationProps['onChange'] = (page) => {
     //     setCurrent(page);
     // };
@@ -24,7 +25,8 @@ const AllUserPage = () => {
                 {/* <Pagination current={current} onChange={onChange} total={data?.meta?.total} /> */}
             </div>
 
-            <ComponentsDatatablesAdvanced />
+            {/* <ComponentsDatatablesAdvanced /> */}
+            <TableForAllUsers />
         </div>
     );
 };
