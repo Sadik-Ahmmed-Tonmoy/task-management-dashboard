@@ -3,12 +3,13 @@ import StatusBadge from '@/app/(defaults)/components/StatusBadge';
 import { useGetAllUsersQuery } from '@/redux/features/auth/authApi';
 import { AudioOutlined } from '@ant-design/icons';
 import type { GetProps } from 'antd';
-import { Input } from 'antd';
+import { Input, Modal } from 'antd';
 import sortBy from 'lodash/sortBy';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import ReactLoading from 'react-loading';
+import { BiFilterAlt } from 'react-icons/bi';
 
 interface UserRecord {
     _id: number;
@@ -26,20 +27,33 @@ const TableForAllUsers = () => {
     const PAGE_SIZES = [10, 20, 30, 50, 100];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [inputValue, setInputValue] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
     const queryObj = [
         {
-            name: "page",
+            name: 'page',
             value: page,
         },
         {
-            name: "limit",
+            name: 'limit',
             value: pageSize,
         },
         {
-            name: "search",
+            name: 'search',
             value: inputValue,
-        }
+        },
     ];
     const { data, error, isLoading, isSuccess } = useGetAllUsersQuery(queryObj);
 
@@ -128,8 +142,6 @@ const TableForAllUsers = () => {
     //     return option;
     // };
 
-  
-
     if (isLoading) {
         return (
             <div className="flex h-[calc(100vh-200px)] items-center justify-center">
@@ -143,21 +155,32 @@ const TableForAllUsers = () => {
             <div className="flex items-center justify-between">
                 <div></div>
                 <h3 className="my-3 text-center text-3xl">All Users</h3>
-                <Input
-                    placeholder=""
-                    className="dark:bg-[#1a2941] dark:text-white dark:placeholder:text-red-500"
-                    style={{ width: 200 }}
-                    value={inputValue}
-                    onChange={(event) => setInputValue(event.target.value)} 
-                    suffix={
-                        <FaSearch
-                            style={{
-                                fontSize: 16,
-                            }}
-                            className="dark:text-white"
-                        />
-                    }
-                />
+                <div className="flex items-center gap-3">
+                    {' '}
+                    <Input
+                        placeholder=""
+                        className="dark:bg-[#1a2941] dark:text-white dark:placeholder:text-red-500"
+                        style={{ width: 200 }}
+                        value={inputValue}
+                        onChange={(event) => setInputValue(event.target.value)}
+                        suffix={
+                            <FaSearch
+                                style={{
+                                    fontSize: 16,
+                                }}
+                                className="dark:text-white"
+                            />
+                        }
+                    />
+                    <div>
+                        <BiFilterAlt size={25} onClick={showModal} className="cursor-pointer" />
+                    </div>
+                    <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel} footer={false}>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                    </Modal>
+                </div>
             </div>
             <div className="datatables">
                 {isSuccess && (
