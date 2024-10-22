@@ -1,5 +1,10 @@
 import { baseApi } from '../../api/baseApi';
 
+type TQueryParam = {
+    name: string;
+    value: any;
+};
+
 const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation({
@@ -30,13 +35,23 @@ const authApi = baseApi.injectEndpoints({
             }),
             providesTags: ['User'],
         }),
-       getAllUsers: builder.query({
-        query: ({ page, pageSize }) => ({
-            url: `users?page=${page}&limit=${pageSize}`,
-            method: 'GET',
+        getAllUsers: builder.query({
+            query: (query) => {
+                const params = new URLSearchParams();
+
+                if (query) {
+                    query.forEach((item: TQueryParam) => {
+                        params.append(item.name, item.value as string);
+                    });
+                }
+                return {
+                    url: `users`,
+                    method: 'GET',
+                    params: params,
+                };
+            },
+            providesTags: ['User'],
         }),
-        providesTags: ['User'],
-    }),
         updateUser: builder.mutation({
             query: (userInfo) => {
                 return {

@@ -1,12 +1,14 @@
 'use client';
+import StatusBadge from '@/app/(defaults)/components/StatusBadge';
+import { useGetAllUsersQuery } from '@/redux/features/auth/authApi';
+import { AudioOutlined } from '@ant-design/icons';
+import type { GetProps } from 'antd';
+import { Input } from 'antd';
+import sortBy from 'lodash/sortBy';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
-import sortBy from 'lodash/sortBy';
-import IconStar from '@/components/icon/icon-star';
-import ReactApexChart from 'react-apexcharts';
-import { useGetAllUsersQuery } from '@/redux/features/auth/authApi';
+import { FaSearch } from 'react-icons/fa';
 import ReactLoading from 'react-loading';
-import StatusBadge from '@/app/(defaults)/components/StatusBadge';
 
 interface UserRecord {
     _id: number;
@@ -23,8 +25,23 @@ const TableForAllUsers = () => {
     const [page, setPage] = useState(1);
     const PAGE_SIZES = [10, 20, 30, 50, 100];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+    const [inputValue, setInputValue] = useState('');
 
-    const { data, error, isLoading, isSuccess } = useGetAllUsersQuery({ page, pageSize });
+    const queryObj = [
+        {
+            name: "page",
+            value: page,
+        },
+        {
+            name: "limit",
+            value: pageSize,
+        },
+        {
+            name: "search",
+            value: inputValue,
+        }
+    ];
+    const { data, error, isLoading, isSuccess } = useGetAllUsersQuery(queryObj);
 
     const [initialRecords, setInitialRecords] = useState<UserRecord[]>([]);
     const [recordsData, setRecordsData] = useState<UserRecord[]>([]);
@@ -111,6 +128,8 @@ const TableForAllUsers = () => {
     //     return option;
     // };
 
+  
+
     if (isLoading) {
         return (
             <div className="flex h-[calc(100vh-200px)] items-center justify-center">
@@ -121,6 +140,25 @@ const TableForAllUsers = () => {
 
     return (
         <div className="panel mt-6">
+            <div className="flex items-center justify-between">
+                <div></div>
+                <h3 className="my-3 text-center text-3xl">All Users</h3>
+                <Input
+                    placeholder=""
+                    className="dark:bg-[#1a2941] dark:text-white dark:placeholder:text-red-500"
+                    style={{ width: 200 }}
+                    value={inputValue}
+                    onChange={(event) => setInputValue(event.target.value)} 
+                    suffix={
+                        <FaSearch
+                            style={{
+                                fontSize: 16,
+                            }}
+                            className="dark:text-white"
+                        />
+                    }
+                />
+            </div>
             <div className="datatables">
                 {isSuccess && (
                     <DataTable
