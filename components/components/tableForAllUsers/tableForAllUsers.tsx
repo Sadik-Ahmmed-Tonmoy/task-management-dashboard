@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { LiaLevelUpAltSolid } from 'react-icons/lia';
 import { VscDebugBreakpointLogUnverified } from 'react-icons/vsc';
+import { PiCheckFatLight } from 'react-icons/pi';
 
 interface UserRecord {
     _id: number;
@@ -43,10 +44,20 @@ const TableForAllUsers = () => {
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [inputValue, setInputValue] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isActiveUser, setIsActiveUser] = useState(false);
+    const [isActiveUser, setIsActiveUser] = useState(true);
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        reset,
+        formState: { errors },
+    } = useForm<FormData>({
+        resolver: zodResolver(formSchema),
+    });
 
     const showModal = () => {
         setIsModalOpen(true);
+        setValue('isActive', true);
     };
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -63,7 +74,9 @@ const TableForAllUsers = () => {
             { name: 'page', value: page },
             { name: 'limit', value: pageSize },
             { name: 'search', value: inputValue },
-        ]);
+        ]
+    
+    );
     }, [page, pageSize, inputValue]);
 
     const { data, error, isLoading, isSuccess, isFetching } = useGetAllUsersQuery(queryObj);
@@ -76,10 +89,7 @@ const TableForAllUsers = () => {
         direction: 'asc',
     });
 
-    const [isMounted, setIsMounted] = useState(false);
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+ 
 
     // This effect will update the `initialRecords` and `recordsData` only when the data is available
     useEffect(() => {
@@ -99,17 +109,9 @@ const TableForAllUsers = () => {
         setPage(1);
     }, [sortStatus]);
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        reset,
-        formState: { errors },
-    } = useForm<FormData>({
-        resolver: zodResolver(formSchema),
-    });
+   
 
-    console.log(isActiveUser);
+ 
     const handleFilter = async (formData: FieldValues) => {
         // Construct the query object with form data
         const newQueryObj = [
@@ -133,7 +135,7 @@ const TableForAllUsers = () => {
         // Update the queryObj state
         setQueryObj(filteredQueryObj);
         setIsModalOpen(false);
-        reset();
+        // reset();
     };
     if (isLoading) {
         return (
@@ -198,25 +200,25 @@ const TableForAllUsers = () => {
                                 {/* active inactive */}
                                 <div className="flex items-center gap-3">
                                     <div className="flex flex-col items-center justify-center gap-1">
-                                        {isActiveUser ? <FaCheck className="" /> : <div className='p-[6.5px]'></div>}
+                                        {isActiveUser ? <PiCheckFatLight  className="" /> : <div className='p-[6.5px]'></div>}
                                         <div
                                             onClick={() => {
                                                 setValue('isActive', true);
                                                 setIsActiveUser(true);
                                             }}
-                                            className={`rounded-md bg-green-500 px-3 py-1 text-white cursor-pointer ${isActiveUser ? 'scale-105 shadow-2xl' : ''}`}
+                                            className={`rounded-md bg-green-500 px-3 py-1 text-white cursor-pointer ${isActiveUser ? 'scale-110 shadow-2xl' : ''}`}
                                         >
                                             <p>Active User</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-col items-center gap-1">
-                                        {isActiveUser ? <div className='p-[6.5px]'></div> : <FaCheck className="" />}
+                                        {isActiveUser ? <div className='p-[6.5px]'></div> : <PiCheckFatLight className="" />}
                                         <div
                                             onClick={() => {
                                                 setValue('isActive', false);
                                                 setIsActiveUser(false);
                                             }}
-                                            className={`rounded-md bg-red-500 px-3 py-1 text-white cursor-pointer ${isActiveUser ? '' : 'scale-105 shadow-2xl'}`}	
+                                            className={`rounded-md bg-red-500 px-3 py-1 text-white cursor-pointer ${isActiveUser ? '' : 'scale-110 shadow-2xl'}`}	
                                         >
                                             <p>Inactive User</p>
                                         </div>
