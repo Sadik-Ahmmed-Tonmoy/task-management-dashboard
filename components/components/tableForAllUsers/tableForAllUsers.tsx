@@ -1,23 +1,19 @@
 'use client';
 import StatusBadge from '@/app/(defaults)/components/StatusBadge';
 import { useGetAllUsersQuery } from '@/redux/features/auth/authApi';
-import { AudioOutlined } from '@ant-design/icons';
-import type { GetProps } from 'antd';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Modal } from 'antd';
 import sortBy from 'lodash/sortBy';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
-import { FaCheck, FaSearch } from 'react-icons/fa';
-import ReactLoading from 'react-loading';
-import { BiFilterAlt } from 'react-icons/bi';
 import { FieldValues, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { BiFilterAlt } from 'react-icons/bi';
+import { FaSearch } from 'react-icons/fa';
 import { LiaLevelUpAltSolid } from 'react-icons/lia';
-import { VscDebugBreakpointLogUnverified } from 'react-icons/vsc';
 import { PiCheckFatLight } from 'react-icons/pi';
-
-interface UserRecord {
+import { VscDebugBreakpointLogUnverified } from 'react-icons/vsc';
+import ReactLoading from 'react-loading';
+import { z } from 'zod';
     _id: number;
     username: string;
     email: string;
