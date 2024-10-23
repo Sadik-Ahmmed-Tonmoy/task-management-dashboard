@@ -45,6 +45,15 @@
 @tailwind components;
 @tailwind utilities;
 
+
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number]{
+    -moz-appearance: textfield;
+  }
+
 @layer components {
     html {
         @apply scroll-smooth;
