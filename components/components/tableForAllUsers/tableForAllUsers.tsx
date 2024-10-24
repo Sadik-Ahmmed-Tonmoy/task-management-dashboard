@@ -14,6 +14,8 @@ import { PiCheckFatLight } from 'react-icons/pi';
 import { VscDebugBreakpointLogUnverified } from 'react-icons/vsc';
 import ReactLoading from 'react-loading';
 import { z } from 'zod';
+
+type UserRecord ={
     _id: number;
     username: string;
     email: string;
@@ -71,7 +73,6 @@ const TableForAllUsers = () => {
             { name: 'limit', value: pageSize },
             { name: 'search', value: inputValue },
         ]
-    
     );
     }, [page, pageSize, inputValue]);
 

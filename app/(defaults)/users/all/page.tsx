@@ -4,9 +4,9 @@ import { useGetAllUsersQuery } from '@/redux/features/auth/authApi';
 import { useState } from 'react';
 
 const AllUserPage = () => {
-    const [page, setCurrent] = useState(1);
-    const [pageSize, setLimit] = useState(10); // Default limit is 10
-    const { data, error, isLoading, isSuccess } = useGetAllUsersQuery({ page, pageSize });
+    // const [page, setCurrent] = useState(1);
+    // const [pageSize, setLimit] = useState(10); // Default limit is 10
+    // const { data, error, isLoading, isSuccess } = useGetAllUsersQuery({ page, pageSize });
     // const onChange: PaginationProps['onChange'] = (page) => {
     //     setCurrent(page);
     // };

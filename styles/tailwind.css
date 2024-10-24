@@ -46,6 +46,11 @@
 @tailwind utilities;
 
 
+/* .ant-select-selector, .ant-select-arrow{
+    background-color: #191e3a !important;
+    color: #e0e6ed !important;
+} */
+
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
