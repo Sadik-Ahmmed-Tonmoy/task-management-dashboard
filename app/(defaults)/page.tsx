@@ -1,3 +1,4 @@
+import ActiveUserStatisticsChart from '@/components/components/ActiveUserStatisticsChart/ActiveUserStatisticsChart';
 import StatisticsChart from '@/components/components/StatisticsChart/StatisticsChart';
 import ComponentsDashboardSales from '@/components/dashboard/components-dashboard-sales';
 import { Metadata } from 'next';
@@ -11,6 +12,7 @@ const Sales = () => {
     return (
         <>
             <StatisticsChart />
+            <ActiveUserStatisticsChart />;
             <ComponentsDashboardSales />;
         </>
     );

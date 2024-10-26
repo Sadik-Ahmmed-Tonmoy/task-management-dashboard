@@ -1,9 +1,9 @@
 import { TQueryParam } from '@/types/types';
 import { baseApi } from '../../api/baseApi';
 
-const statisticsApi = baseApi.injectEndpoints({
+const activeUserApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getDailyStatistics: builder.query({
+        getDailyActiveUser: builder.query({
             query: (query) => {
                 const params = new URLSearchParams();
 
@@ -13,14 +13,14 @@ const statisticsApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: `statistics/daily`,
+                    url: `admin/daily`,
                     method: 'GET',
                     params: params,
                 };
             },
-            providesTags: ['Statistics'],
+            providesTags: ['ActiveUser'],
         }),
-        getWeeklyStatistics: builder.query({
+        getWeeklyActiveUser: builder.query({
             query: (query) => {
                 const params = new URLSearchParams();
 
@@ -30,14 +30,14 @@ const statisticsApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: `statistics/weekly`,
+                    url: `admin/weekly`,
                     method: 'GET',
                     params: params,
                 };
             },
-            providesTags: ['Statistics'],
+            providesTags: ['ActiveUser'],
         }),
-        getMonthlyStatistics: builder.query({
+        getMonthlyActiveUser: builder.query({
             query: (query) => {
                 const params = new URLSearchParams();
 
@@ -47,12 +47,12 @@ const statisticsApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: `statistics/monthly`,
+                    url: `admin/monthly`,
                     method: 'GET',
                     params: params,
                 };
             },
-            providesTags: ['Statistics'],
+            providesTags: ['ActiveUser'],
         }),
        
         // getAllPendingPayments: builder.query({
@@ -85,4 +85,4 @@ const statisticsApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useGetDailyStatisticsQuery, useGetWeeklyStatisticsQuery, useGetMonthlyStatisticsQuery } = statisticsApi;
+export const { useGetDailyActiveUserQuery, useGetWeeklyActiveUserQuery, useGetMonthlyActiveUserQuery } = activeUserApi;

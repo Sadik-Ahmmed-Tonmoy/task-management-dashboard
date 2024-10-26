@@ -1,5 +1,6 @@
 'use client';
-import { useGetDailyStatisticsQuery, useGetMonthlyStatisticsQuery, useGetWeeklyStatisticsQuery } from '@/redux/features/statistics/statisticsApi';
+
+
 import { TQueryParam } from '@/types/types';
 import React, { useEffect, useState } from 'react';
 import Dropdown from '@/components/dropdown';
@@ -10,8 +11,9 @@ import ReactApexChart from 'react-apexcharts';
 import ReactLoading from 'react-loading';
 import dayjs from 'dayjs';
 import { ConfigProvider, Select } from 'antd';
+import { useGetDailyActiveUserQuery, useGetMonthlyActiveUserQuery, useGetWeeklyActiveUserQuery } from '@/redux/features/activeUser/activeUserApi';
 
-const StatisticsChart = () => {
+const ActiveUserStatisticsChart = () => {
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl';
     const [queryObj, setQueryObj] = useState<TQueryParam[]>([]);
@@ -45,44 +47,30 @@ const StatisticsChart = () => {
     };
 
     const mapDataToChartSeries = (data: any) => {
-        // const days = data?.map((item: any) => `Day ${item?.date}`);
-        // const months = data?.map((item: any) => `Month ${item?.date}`);
-        // const years = data?.map((item: any) => `Year ${item?.date}`);
-
-        const logins = data?.map((item: any) => item?.logins || 0);
-        const loginDiff = data?.map((item: any) => item?.login_diff || 0);
-        const previousLogins = data?.map((item: any) => (item.previous_logins !== null ? item.previous_logins : 0));
-        const labels = data?.map((item: any) => (fetchOption === 'Daily' ? dayjs(item?.date).format('DD')  : fetchOption === 'Weekly' ? `${item?.week}` : ` ${item?.month}`));
+        const activeUsers = data?.map((item: any) => item?.activeUsers || 0);
+        const labels = data?.map((item: any) => (fetchOption === 'Daily' ? dayjs(item?.date).format('DD') : fetchOption === 'Weekly' ? `${item?.week}` : ` ${item?.month}`));
         return {
             labels,
             series: [
                 {
-                    name: 'Logins',
-                    data: logins,
-                },
-                {
-                    name: 'Login Difference',
-                    data: loginDiff,
-                },
-                {
-                    name: 'Previous Logins',
-                    data: previousLogins,
+                    name: 'Active Users',
+                    data: activeUsers,
                 },
             ],
         };
     };
 
     // Conditionally fetch data based on selected fetch option
-    const { data: dailyData, isLoading: dailyIsLoading, isSuccess: dailyIsSuccess } = useGetDailyStatisticsQuery(queryObj, { skip: fetchOption !== 'Daily' });
-    const { data: weeklyData, isLoading: weeklyIsLoading, isSuccess: weeklyIsSuccess } = useGetWeeklyStatisticsQuery(queryObj, { skip: fetchOption !== 'Weekly' });
-    const { data: monthlyData, isLoading: monthlyIsLoading, isSuccess: monthlyIsSuccess } = useGetMonthlyStatisticsQuery(queryObj, { skip: fetchOption !== 'Monthly' });
+    const { data: dailyData, isLoading: dailyIsLoading, isSuccess: dailyIsSuccess } = useGetDailyActiveUserQuery(queryObj, { skip: fetchOption !== 'Daily' });
+    const { data: weeklyData, isLoading: weeklyIsLoading, isSuccess: weeklyIsSuccess } = useGetWeeklyActiveUserQuery(queryObj, { skip: fetchOption !== 'Weekly' });
+    const { data: monthlyData, isLoading: monthlyIsLoading, isSuccess: monthlyIsSuccess } = useGetMonthlyActiveUserQuery(queryObj, { skip: fetchOption !== 'Monthly' });
 
     const chartData = dailyIsSuccess
-        ? mapDataToChartSeries(dailyData?.data)
+        ? mapDataToChartSeries(dailyData?.data?.dailyData)
         : weeklyIsSuccess
-        ? mapDataToChartSeries(weeklyData?.data)
+        ? mapDataToChartSeries(weeklyData?.data?.weeklyData) // Adjust according to your API response structure
         : monthlyIsSuccess
-        ? mapDataToChartSeries(monthlyData?.data)
+        ? mapDataToChartSeries(monthlyData?.data?.monthlyData) // Adjust according to your API response structure
         : { labels: [], series: [] };
 
     const revenueChart: any = {
@@ -171,7 +159,7 @@ const StatisticsChart = () => {
         <>
             <div className="panel h-full xl:col-span-2">
                 <div className="mb-5 flex items-center justify-between dark:text-white-light">
-                    <h5 className="text-lg font-semibold">Login Statistics</h5>
+                    <h5 className="text-lg font-semibold">Active User Statistics</h5>
                     <div className="flex items-center">
                         <ConfigProvider
                             theme={{
@@ -221,12 +209,21 @@ const StatisticsChart = () => {
                                 </ul>
                             </Dropdown>
                         </div>
+                        {/* <div className="dropdown ml-4 flex items-center">
+                            <Dropdown
+                                defaultOption="Daily"
+                                options={['Daily', 'Weekly', 'Monthly']}
+                                onChange={handleFetchOptionChange}
+                            />
+                            <IconHorizontalDots />
+                        </div> */}
                     </div>
                 </div>
+
                 <ReactApexChart options={revenueChart.options} series={revenueChart.series} type="area" height={350} />
             </div>
         </>
     );
 };
 
-export default StatisticsChart;
+export default ActiveUserStatisticsChart;
