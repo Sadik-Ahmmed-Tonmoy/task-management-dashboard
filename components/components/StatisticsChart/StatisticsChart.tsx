@@ -169,7 +169,7 @@ const StatisticsChart = () => {
 
     return (
         <>
-            <div className="panel h-full xl:col-span-2">
+            <div className="panel h-full xl:col-span-2 mb-4">
                 <div className="mb-5 flex items-center justify-between dark:text-white-light">
                     <h5 className="text-lg font-semibold">Login Statistics</h5>
                     <div className="flex items-center">

@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 const Sales = () => {
     return (
         <>
+            <ActiveUserStatisticsChart />
             <StatisticsChart />
-            <ActiveUserStatisticsChart />;
-            <ComponentsDashboardSales />;
+            <ComponentsDashboardSales />
         </>
     );
 };
