@@ -6,18 +6,29 @@ import { IRootState } from '@/store';
 import { ApexOptions } from 'apexcharts';
 import { useGetPointsDistributionQuery } from '@/redux/features/pointsDistribution/pointsDistributionApi';
 import ReactLoading from 'react-loading';
+import Swal from 'sweetalert2';
 
 
 
 const PointsDistributionChart = () => {
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const [isMounted, setIsMounted] = useState(false);
-    const { data, isLoading, isSuccess} = useGetPointsDistributionQuery(undefined)
+    const { data, isLoading, isSuccess, error, isError} = useGetPointsDistributionQuery(undefined)
     console.log(data?.data);
 
+  
     useEffect(() => {
-        setIsMounted(true);
-    }, []);
+        if (isError) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                // title: '',
+                text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
+                showConfirmButton: true,
+                // timer: 1500,
+            });
+        }
+    }, [isError, error]);
 
     
 
