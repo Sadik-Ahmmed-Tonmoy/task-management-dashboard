@@ -1,10 +1,9 @@
 import { Form, Select } from "antd";
-import { Controller } from "react-hook-form";
-// import { ControllerProps } from "react-hook-form";
-
+import { Controller, useFormContext } from "react-hook-form";
 import { SelectProps } from "antd";
-import "./MyFormSelect.css";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
+import "./MyFormSelect.css";
 
 interface MyFormSelectProps {
   label: string;
@@ -14,6 +13,7 @@ interface MyFormSelectProps {
   mode?: "multiple" | "tags"; // these are the two modes supported by Ant Design's Select
   placeHolder: string;
   className?: string;
+  defaultValue?: any; // Allow setting a default value for the select
 }
 
 const MyFormSelect = ({
@@ -24,7 +24,17 @@ const MyFormSelect = ({
   mode,
   placeHolder,
   className,
+  defaultValue,
 }: MyFormSelectProps) => {
+  const { control, setValue } = useFormContext();
+
+  // If a defaultValue is provided, set it programmatically using `setValue`
+  useEffect(() => {
+    if (defaultValue !== undefined) {
+      setValue(name, defaultValue); // Set the value using react-hook-form's setValue
+    }
+  }, [defaultValue, name, setValue]);
+
   return (
     <Controller
       name={name}

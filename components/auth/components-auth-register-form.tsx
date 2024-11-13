@@ -26,7 +26,7 @@ const ComponentsAuthRegisterForm = () => {
     const [signupFn, { isError: isRegistrationError,data, error: registrationError, isLoading }] = useRegisterMutation();
     const [login, { isError, error }] = useLoginMutation();
 
-    console.log({isRegistrationError, registrationError, isLoading, data});
+    
     const {
         register,
         handleSubmit,
@@ -57,7 +57,7 @@ const ComponentsAuthRegisterForm = () => {
             if (res.success) {
                 router.push('/')
             } else {
-                console.log('Login Failed:', res.error);
+                
             }
         } catch (e) {
             console.error('Error during login:', e);

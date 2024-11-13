@@ -8,7 +8,7 @@ interface TaskId {
 }
 
 const updateTaskPage = ({ params }: TaskId) => {
-    console.log('task', params?.taskId);
+    
     return (
         <div>
             <ComponentsDashboardUpdateTask id={params?.taskId} />

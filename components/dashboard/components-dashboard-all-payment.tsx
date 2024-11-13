@@ -39,7 +39,7 @@ const ComponentsDashboardAllPayment = () => {
 
             if (result.isConfirmed) {
                 const res = await paymentStatusApproveMutation(id).unwrap();
-                console.log(res);
+                
                 await Swal.fire({
                     title: 'Approved!',
                     text: res?.message,
@@ -69,7 +69,7 @@ const ComponentsDashboardAllPayment = () => {
 
             if (result.isConfirmed) {
                 const res = await paymentStatusRejectMutation(id).unwrap();
-                console.log(res);
+                
                 await Swal.fire({
                     title: 'Rejected!',
                     text: res?.message,
@@ -96,7 +96,7 @@ const ComponentsDashboardAllPayment = () => {
     const [initialRecords, setInitialRecords] = useState<TPaymentRequest[]>([]);
     const [recordsData, setRecordsData] = useState<TPaymentRequest[]>([]);
 
-    console.log('recordsData', recordsData);
+    
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'id',
         direction: 'asc',

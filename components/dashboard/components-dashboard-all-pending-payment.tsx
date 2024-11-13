@@ -33,7 +33,7 @@ const ComponentsDashboardAllPendingPayment = () => {
 
             if (result.isConfirmed) {
                 const res = await paymentStatusApproveMutation(id).unwrap();
-                console.log(res);
+                
                 await Swal.fire({
                     title: 'Approved!',
                     text: res?.message,
@@ -64,7 +64,7 @@ const ComponentsDashboardAllPendingPayment = () => {
 
             if (result.isConfirmed) {
                 const res = await paymentStatusRejectMutation(id).unwrap();
-                console.log(res);
+                
                 await Swal.fire({
                     title: 'Rejected!',
                     text: res?.message,

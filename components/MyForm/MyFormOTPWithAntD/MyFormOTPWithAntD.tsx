@@ -28,7 +28,7 @@ const MyFormOTPWithAntD = ({
 }: TInputProps) => {
 
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
-console.log(otp);
+
   const { control, setValue } = useFormContext();
 
   useEffect(() => {

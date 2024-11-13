@@ -103,7 +103,7 @@ const ComponentsDashboardUpdateTask = ({ id }: { id: string }) => {
     const handleUpdateTask = async (formData: FieldValues) => {
         formData.id = id
 
-        console.log(formData);
+        
         try {
             const res = await updateTaskMutation(formData).unwrap();
             if (res.success) {

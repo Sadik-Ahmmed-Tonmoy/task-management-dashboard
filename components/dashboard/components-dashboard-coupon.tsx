@@ -1,26 +1,25 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyFormWrapper from '../MyForm/MyFormWrapper/MyFormWrapper';
 import { z } from 'zod';
 import { FieldValues } from 'react-hook-form';
 import MyFormInputHTML from '../MyForm/MyFormInput/MyFormInputHTML';
 import MyFormSelect from '../MyForm/MyFormSelect/MyFormSelect';
+import { useCreateCouponMutation, useDeleteCouponMutation, useGetAllCouponQuery, useUpdateCouponMutation } from '@/redux/features/coupon/couponApi';
+import Swal from 'sweetalert2';
+import ReactLoading from 'react-loading';
+import { Modal } from 'antd';
 import MyFormDatePicker from '../MyForm/MyFormDatePicker/MyFormDatePicker ';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
-const fakeCoupons = [
-    { id: '1', code: 'WELCOME10', discount: 10, expiryDate: '2024-12-31' },
-    { id: '2', code: 'SUMMER20', discount: 20, expiryDate: '2025-06-30' },
-    { id: '3', code: 'FREESHIP', discount: 0, expiryDate: '2025-01-15' },
-    { id: '4', code: 'HOLIDAY25', discount: 25, expiryDate: '2024-12-25' },
-    { id: '5', code: 'BLACKFRIDAY50', discount: 50, expiryDate: '2024-11-29' },
-    { id: '6', code: 'SPRING15', discount: 15, expiryDate: '2025-04-15' },
-    { id: '7', code: 'NEWYEAR30', discount: 30, expiryDate: '2025-01-01' },
-    { id: '8', code: 'VIP40', discount: 40, expiryDate: '2025-12-31' },
-    { id: '9', code: 'BIRTHDAY50', discount: 50, expiryDate: '2025-05-01' },
-    { id: '10', code: 'FLASHSALE70', discount: 70, expiryDate: '2024-12-01' },
-];
+interface Coupon {
+    _id: string;
+    code: string;
+    discount: number;
+    expirationDate: string;
+    availability?: boolean;
+}
 
 const couponValidationSchema = z.object({
     code: z
@@ -47,177 +46,173 @@ const couponValidationSchema = z.object({
 });
 
 const ComponentsDashboardCoupon = () => {
-    const [coupons, setCoupons] = useState(fakeCoupons);
-    const [code, setCode] = useState('');
-    const [discount, setDiscount] = useState(0);
-    const [expiryDate, setExpiryDate] = useState(new Date());
-    const [editingId, setEditingId] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCreateCoupon, setIsCreateCoupon] = useState(false);
+    const [updateId, setUpdateId] = useState<string | null>(null);
+    const [selectedItemForUpdate, setSelectedItemForUpdate] = useState<Partial<Coupon>>({});
+    const { data: AllCouponData, isLoading } = useGetAllCouponQuery(undefined);
+    const [createCouponMutation] = useCreateCouponMutation();
+    const [updateCouponMutation] = useUpdateCouponMutation();
+    const [deleteCouponMutation] = useDeleteCouponMutation();
+    useEffect(() => {
+        if (updateId && AllCouponData?.data?.coupons) {
+            const selectedItem = AllCouponData?.data?.coupons.find((c: Coupon) => c._id === updateId);
+            if (selectedItem) {
+                setSelectedItemForUpdate(selectedItem);
+            }
+        }
+    }, [updateId, AllCouponData]);
+    console.log(selectedItemForUpdate);
 
-    console.log(coupons);
-    const handleEdit = (id: string) => {
-        const couponToEdit = coupons.find((coupon) => coupon.id === id);
-        if (couponToEdit) {
-            setCode(couponToEdit.code);
-            setDiscount(couponToEdit.discount);
-            setExpiryDate(new Date(couponToEdit.expiryDate));
-            setEditingId(id);
+    const handleDelete = async (id: string) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await deleteCouponMutation(id).unwrap();
+                if (res.success) {
+                    Swal.fire('Deleted!', res.message || 'Coupon deleted successfully', 'success');
+                } else {
+                    Swal.fire('Error!', 'Failed to delete coupon', 'error');
+                }
+            } catch (e) {
+                Swal.fire('Error!', 'An error occurred while deleting the coupon', 'error');
+            }
         }
     };
 
-    const handleDelete = (id: string) => {
-        const updatedCoupons = coupons.filter((coupon) => coupon.id !== id);
-        setCoupons(updatedCoupons);
-    };
-
-    const handleDateChange = (date: Date | null) => {
-        if (date) {
-            setExpiryDate(date);
+    const handleSubmit = async (formData: FieldValues, reset: any) => {
+        formData.expirationDate = dayjs(formData.expirationDate, 'YYYY-MM-DD').add(1, 'day');
+        setIsModalOpen(false);
+        reset();
+        try {
+            const res = await createCouponMutation(formData).unwrap();
+            if (res.success) {
+                Swal.fire('Success!', res.message, 'success');
+            } else {
+                Swal.fire('Error!', 'Failed to create coupon', 'error');
+            }
+        } catch (e) {
+            Swal.fire('Error!', 'Failed to create coupon', 'error');
         }
     };
 
-    const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        const data = {
-            code,
-            discount,
-            expiryDate: expiryDate.toISOString().split('T')[0],
-        };
-
-        if (editingId) {
-            const updatedCoupons = coupons.map((coupon) => (coupon.id === editingId ? { ...coupon, ...data } : coupon));
-            setCoupons(updatedCoupons);
-            // update existing coupon
-            // updatedCoupons
-        } else {
-            const newCoupon = {
-                id: (coupons.length + 1).toString(),
-                ...data,
-            };
-            setCoupons([...coupons, newCoupon]);
-
-            // Add new coupon
-            // newCoupon
-        }
-
-        setCode('');
-        setDiscount(0);
-        setExpiryDate(new Date());
-        setEditingId(null); // Clear the editing state
-    };
-
-    const handleSubmit = async (formData: FieldValues) => {
-        const fromDate = moment(formData?.expirationDate?.$d).format('YYYY-MM-DD');
-        formData.expirationDate = fromDate;
+    const handleEditSubmit = async (formData: FieldValues, reset: any) => {
         console.log(formData);
-        // try {
-        //   const res = await login(formData).unwrap();
-        //   if (res.success) {
-        //     console.log("Login Successful:", res.data);
-
-        //     const user = await verifyToken(res?.data?.accessToken);
-
-        //     await dispatch(setUser({ user: user, token: res?.data?.accessToken }));
-
-        //     // Show success message
-        //     Swal.fire({
-        //       position: "top-end",
-        //       icon: "success",
-        //       title: "Login Successful",
-        //       showConfirmButton: false,
-        //       timer: 2500,
-        //     });
-        //     router.push("/");
-        //   } else {
-        //     console.log("Login Failed:", res.error);
-        //   }
-        // } catch (e) {
-        //   console.error("Error during login:", e);
-        // }
+        formData.expirationDate = dayjs(formData.expirationDate, 'YYYY-MM-DD').add(1, 'day');
+        formData._id = updateId;
+        setIsModalOpen(false);
+        reset();
+        try {
+            const res = await updateCouponMutation(formData).unwrap();
+            if (res.success) {
+                Swal.fire('Success!', res.message, 'success');
+            } else {
+                Swal.fire('Error!', 'Failed to create coupon', 'error');
+            }
+        } catch (e) {
+            Swal.fire('Error!', 'Failed to create coupon', 'error');
+        }
     };
+
+    const openModalForCreate = () => {
+        setSelectedItemForUpdate({});
+        setIsCreateCoupon(true);
+        setIsModalOpen(true);
+    };
+
+    const openModalForEdit = (id: string) => {
+        setUpdateId(id);
+        const selectedItem = AllCouponData?.data?.coupons.find((c: Coupon) => c._id === id);
+        if (selectedItem) {
+            setSelectedItemForUpdate(selectedItem);
+            setIsCreateCoupon(false);
+            setIsModalOpen(true);
+        }
+    };
+
+    // Determine defaultValues based on create or edit mode
+    const defaultValues = isCreateCoupon
+        ? { code: '', discount: 0, expirationDate: null, availability: '' }
+        : {
+              code: selectedItemForUpdate?.code || '',
+              discount: selectedItemForUpdate?.discount?.toString() || 0,
+              expirationDate: selectedItemForUpdate?.expirationDate ? dayjs(selectedItemForUpdate?.expirationDate, 'YYYY-MM-DD') : '',
+              availability: selectedItemForUpdate?.availability == true ? 'true' : 'false',
+          };
+    if (isLoading) {
+        return (
+            <div className="flex h-[calc(100vh-200px)] items-center justify-center">
+                <ReactLoading type="bars" color="#4361ee" height="5%" width="5%" className="mx-auto" />
+            </div>
+        );
+    }
 
     return (
         <div>
-            <div>
-                {/* <DForm handleFormSubmit={handleFormSubmit} header={false}>
-                    <DHeader>Coupon Details</DHeader>
-                    <DInput
-                        id="coupon_code"
-                        name="coupon_code"
-                        label="Coupon Code"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        required
-                    />
-                    <DInput
-                        id="discount"
-                        name="discount"
-                        label="Discount (%)"
-                        type="number"
-                        value={discount}
-                        onChange={(e) => setDiscount(Number(e.target.value))}
-                        required
-                    />
-                    <DDatePicker
-                        id="expiry_date"
-                        name="expiry_date"
-                        label="Expiry Date"
-                        selectedDate={expiryDate}
-                        onChange={handleDateChange}
-                        required
-                        className="max-w-sm"
-                    />
-                    <Button type="submit">{editingId ? "Update Coupon" : "Add Coupon"}</Button>
-                </DForm> */}
-                <MyFormWrapper onSubmit={handleSubmit} validationSchema={couponValidationSchema} className="my-8 flex flex-col gap-3 max-w-xl mx-auto">
-                    <div className="mb-4 flex flex-col gap-6">
-                        <MyFormInputHTML name="code" label="Coupon Code" placeholder="Enter Your Coupon code" />
-                        <MyFormInputHTML name="discount" type="number" label="Discount (Number Only)" placeholder="Enter Your discount amount" />
-                        <MyFormDatePicker name="expirationDate" label="Expiration Date" placeholder="Select Expiration Date" />
-                        <MyFormSelect
-                            name="availability"
-                            label="Availability"
-                            placeHolder=""
-                            options={[
-                                { label: 'available', value: 'true' },
-                                { label: 'unavailable', value: 'false' },
-                            ]}
-                        />
-                    </div>
-
-        
-
-                    <button
-                        type="submit"
-                        className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-[#002da7] to-[#18337c] font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-                    >
-                        submit
-                    </button>
-                    <div className="my-4 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
-                </MyFormWrapper>
+            <div className="mb-3 me-4 flex justify-end">
+                <button onClick={openModalForCreate} className="w-fit rounded-lg bg-blue-500 px-4 py-2 text-white">
+                    Create Coupon
+                </button>
             </div>
-
-            <div className="container mx-auto mt-5">
+            <Modal title={isCreateCoupon ? 'Create Coupon' : 'Update Coupon'} open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
+                <MyFormWrapper
+                    key={isCreateCoupon ? 'create' : `edit-${updateId}-${JSON.stringify(selectedItemForUpdate)}`} // Use `key` to force re-render
+                    onSubmit={isCreateCoupon ? handleSubmit : handleEditSubmit}
+                    // validationSchema={isCreateCoupon ? couponValidationSchema : updateCouponValidationSchema}
+                    validationSchema={couponValidationSchema}
+                    defaultValues={defaultValues}
+                    className="mx-auto mb-4 mt-8 flex max-w-xl flex-col gap-3"
+                >
+                    <MyFormInputHTML name="code" label="Coupon Code" placeholder="Enter Your Coupon Code" />
+                    <MyFormInputHTML name="discount" type="text" label="Discount (%)" placeholder="Enter Discount" />
+                    <MyFormDatePicker name="expirationDate" label="Expiration Date" placeholder="Select Expiration Date" />
+                    <MyFormSelect
+                        name="availability"
+                        label="Availability"
+                        placeHolder=""
+                        options={[
+                            { label: 'Available', value: 'true' },
+                            { label: 'Unavailable', value: 'false' },
+                        ]}
+                    />
+                    <button type="submit" className="rounded-lg bg-blue-500 px-4 py-2 text-white">
+                        Submit
+                    </button>
+                </MyFormWrapper>
+            </Modal>
+            <div className="slim-scroll container mx-auto overflow-hidden overflow-x-auto">
                 <table className="min-w-full border border-gray-300 bg-white">
                     <thead>
                         <tr>
                             <th className="border-b px-4 py-2 text-center">Code</th>
-                            <th className="border-b px-4 py-2 text-center">Discount (%)</th>
+                            <th className="border-b px-4 py-2 text-center">Discount</th>
                             <th className="border-b px-4 py-2 text-center">Expiry Date</th>
+                            <th className="border-b px-4 py-2 text-center">Availability</th>
                             <th className="border-b px-4 py-2 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {coupons.map((coupon) => (
-                            <tr key={coupon.id}>
+                        {AllCouponData?.data?.coupons.map((coupon: Coupon) => (
+                            <tr key={coupon._id}>
                                 <td className="border-b px-4 py-2 text-center">{coupon.code}</td>
                                 <td className="border-b px-4 py-2 text-center">{coupon.discount}</td>
-                                <td className="border-b px-4 py-2 text-center">{new Date(coupon.expiryDate).toLocaleDateString()}</td>
+                                {/* <td className="border-b px-4 py-2 text-center">{new Date(coupon.expirationDate).toLocaleDateString()}</td> */}
+                                <td className="border-b px-4 py-2 text-center">{dayjs(coupon?.expirationDate, 'YYYY-MM-DD').format('YYYY-MM-DD')}</td>
+                                <td className="border-b px-4 py-2 text-center">{coupon?.availability === true ? 'Available' : 'Unavailable'}</td>
                                 <td className="flex flex-col items-center justify-center gap-2 border-b px-4 py-2 text-center sm:flex-row">
-                                    <button onClick={() => handleEdit(coupon.id)} className="mr-2 rounded bg-blue-500 px-3 py-1 text-white">
+                                    <button onClick={() => openModalForEdit(coupon._id)} className="mr-2 rounded bg-blue-500 px-3 py-1 text-white">
                                         Edit
                                     </button>
-                                    <button onClick={() => handleDelete(coupon.id)} className="rounded bg-red-500 px-3 py-1 text-white">
+                                    <button onClick={() => handleDelete(coupon._id)} className="rounded bg-red-500 px-3 py-1 text-white">
                                         Delete
                                     </button>
                                 </td>

@@ -22,7 +22,7 @@ const getLang = () => {
     let lang = null;
     if (typeof window !== 'undefined') {
         const cookies = new cookieObj(null, { path: '/' });
-        console.log(cookies);
+        
         lang = cookies.get('i18nextLng');
     } else {
         const cookies = cookieObj.cookies();

@@ -23,7 +23,7 @@ const ComponentsSweetAlertsAutoCloseTimer = () => {
             },
         }).then((result) => {
             if (result.dismiss === Swal.DismissReason.timer) {
-                console.log('I was closed by the timer');
+                
             }
         });
     };
@@ -51,7 +51,7 @@ const showAlert = async () => {
         },
     }).then((result) => {
         if (result.dismiss === Swal.DismissReason.timer) {
-            console.log('I was closed by the timer');
+            
         }
     });
 }

@@ -72,7 +72,7 @@ const router = useRouter()
     const handleUpdateProfile = async (formData: FieldValues) => {
        
 
-        console.log(formData);
+        
         try {
             const res = await updateUserMutation(formData).unwrap();
             if (res.success) {

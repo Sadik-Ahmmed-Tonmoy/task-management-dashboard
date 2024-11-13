@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,7 @@ type TInputProps = {
   parentClassName?: string;
   labelClassName?: string;
   inputClassName?: string;
+  defaultValue?: any;
   [key: string]: any; // Allow other props
 }
 
@@ -22,9 +23,18 @@ const MyFormInputHTML = ({
   parentClassName = "",
   labelClassName = "",
   inputClassName = "",
+  defaultValue,
   ...rest
 }: TInputProps) => {
-  const { control } = useFormContext();
+  const { control, setValue  } = useFormContext();
+
+
+  useEffect(() => {
+    if (defaultValue !== undefined) {
+      // This will set the initial value of the input field programmatically
+      setValue(name, defaultValue);
+    }
+  }, [defaultValue, name, setValue]);
 
   return (
     <div className={cn(`form-group ${size}`, parentClassName)}>

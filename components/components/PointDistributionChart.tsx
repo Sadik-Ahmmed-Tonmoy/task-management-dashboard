@@ -14,7 +14,7 @@ const PointsDistributionChart = () => {
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const [isMounted, setIsMounted] = useState(false);
     const { data, isLoading, isSuccess, error, isError} = useGetPointsDistributionQuery(undefined)
-    console.log(data?.data);
+    
 
   
     useEffect(() => {

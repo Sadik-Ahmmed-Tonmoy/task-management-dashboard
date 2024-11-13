@@ -24,7 +24,7 @@ import ReactLoading from 'react-loading';
 const Profile = () => {
 
     const {data : userData, isLoading} = useGetUserDataQuery(undefined)
-console.log(userData);
+
 
     if (isLoading) {
         return (
