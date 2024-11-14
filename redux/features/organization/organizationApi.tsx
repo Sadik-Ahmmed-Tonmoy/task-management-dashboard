@@ -4,7 +4,7 @@ const organizationApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllOrganization: builder.query({
             query: () => ({
-                url: 'organizations/get-all-organizations?page=1&limit=10',
+                url: 'organizations/get-all-organizations',
                 method: 'GET',
             }),
             providesTags: ['Organization'],
