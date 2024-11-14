@@ -66,7 +66,7 @@ const ComponentsAuthLoginForm = () => {
                 Swal.fire({
                     position: 'top-end',
                     icon: 'error',
-                    title: 'Failed to create task',
+                    // title: 'Failed to create task',
                     text: (error as any)?.data?.success === false && (error as any)?.data?.errorSources[0]?.message,
                     showConfirmButton: true,
                 });
@@ -75,7 +75,7 @@ const ComponentsAuthLoginForm = () => {
             Swal.fire({
                 position: 'top-end',
                 icon: 'error',
-                title: 'Failed to create task',
+                // title: 'Failed to create task',
                 text: (e as any)?.data?.success === false && (e as any)?.data?.errorSources[0]?.message,
                 showConfirmButton: true,
             });
@@ -88,7 +88,7 @@ const ComponentsAuthLoginForm = () => {
             <div>
                 <label htmlFor="Email">Email</label>
                 <div className="relative text-white-dark">
-                    <input type="email" {...register('email')} placeholder="Enter Email" className="form-input ps-10 placeholder:text-white-dark" />
+                    <input type="email" {...register('email')} defaultValue={"workwithsadik@gmail.com"} placeholder="Enter Email" className="form-input ps-10 placeholder:text-white-dark" />
                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
                         <IconMail fill={true} />
                     </span>
@@ -98,7 +98,7 @@ const ComponentsAuthLoginForm = () => {
             <div>
                 <label htmlFor="Password">Password</label>
                 <div className="relative text-white-dark">
-                    <input id="Password" type="password" {...register('password')} placeholder="Enter Password" className="form-input ps-10 placeholder:text-white-dark" />
+                    <input id="Password" type="password" defaultValue={"1234"} {...register('password')} placeholder="Enter Password" className="form-input ps-10 placeholder:text-white-dark" />
 
                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
                         <IconLockDots fill={true} />

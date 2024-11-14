@@ -26,7 +26,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<string | FetchArgs, unknown, FetchB
       try {
         const res = await fetch("https://watch-points.vercel.app/api/auth/refresh-token", {
           method: "POST",
-          credentials: "include", // Sends cookies with the request
+          // credentials: "include", // Sends cookies with the request
           headers: {
             "Content-Type": "application/json",
           },
