@@ -36,6 +36,7 @@ import { getTranslation } from '@/i18n';
 import { MdOutlinePayments } from 'react-icons/md';
 import { RiCoupon2Line } from "react-icons/ri";
 import { SiAwsorganizations } from "react-icons/si";
+import { LiaDonateSolid } from 'react-icons/lia';
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -180,6 +181,15 @@ const Sidebar = () => {
                                         {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
                                         <SiAwsorganizations className="shrink-0 group-hover:!text-primary" />
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Organization')}</span>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link href="/donations" className="group">
+                                    <div className="flex items-center">
+                                        {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
+                                        <LiaDonateSolid className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Donations')}</span>
                                     </div>
                                 </Link>
                             </li>

@@ -32,8 +32,8 @@ const couponValidationSchema = z.object({
             required_error: 'Discount amount is required',
         })
         .transform((value) => parseFloat(value))
-        .refine((value) => !isNaN(value) && value >= 0, {
-            message: 'Discount must be a number greater than 0',
+        .refine((value) => !isNaN(value) && value >= 0 && value <=100, {
+            message: 'Discount must be a number between 0 and 100',
         }),
     expirationDate: z
         .any({
@@ -84,7 +84,13 @@ const ComponentsDashboardCoupon = () => {
                     Swal.fire('Error!', 'Failed to delete coupon', 'error');
                 }
             } catch (e) {
-                Swal.fire('Error!', 'An error occurred while deleting the coupon', 'error');
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Failed',
+                    text: (e as any)?.data?.success === false && (e as any)?.data?.errorSources[0]?.message,
+                    showConfirmButton: true,
+                });
             }
         }
     };
@@ -101,7 +107,13 @@ const ComponentsDashboardCoupon = () => {
                 Swal.fire('Error!', 'Failed to create coupon', 'error');
             }
         } catch (e) {
-            Swal.fire('Error!', 'Failed to create coupon', 'error');
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Failed',
+                text: (e as any)?.data?.success === false && (e as any)?.data?.errorSources[0]?.message,
+                showConfirmButton: true,
+            });
         }
     };
 
@@ -119,7 +131,13 @@ const ComponentsDashboardCoupon = () => {
                 Swal.fire('Error!', 'Failed to create coupon', 'error');
             }
         } catch (e) {
-            Swal.fire('Error!', 'Failed to create coupon', 'error');
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Failed',
+                text: (e as any)?.data?.success === false && (e as any)?.data?.errorSources[0]?.message,
+                showConfirmButton: true,
+            });
         }
     };
 
@@ -158,7 +176,9 @@ const ComponentsDashboardCoupon = () => {
 
     return (
         <div>
-            <div className="mb-3 me-4 flex justify-end">
+            <div className="mb-3 me-4 flex flex-col sm:flex-row justify-between items-center">
+                <div></div>
+            <h3 className="my-3 text-center text-3xl">Coupon</h3>
                 <button onClick={openModalForCreate} className="w-fit rounded-lg bg-blue-500 px-4 py-2 text-white">
                     Create Coupon
                 </button>

@@ -2,13 +2,6 @@ import { baseApi } from '../../api/baseApi';
 
 const couponApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        // getAllPaymentsHistory: builder.query({
-        //     query: () => ({
-        //         url: 'payment/history',
-        //         method: 'GET',
-        //     }),
-        //     providesTags: ['Payment'],
-        // }),
         getAllCoupon: builder.query({
             query: () => ({
                 url: 'admin/coupons',
@@ -46,16 +39,7 @@ const couponApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ['Coupon'],
         }),
-        // paymentStatusReject: builder.mutation({
-        //     query: (id) => {
-        //         return {
-        //             url: `payment/reject/${id}`,
-        //             method: 'POST',
-        //             // body: data,
-        //         };
-        //     },
-        //     invalidatesTags: ['Payment'],
-        // }),
+    
     }),
 });
 
