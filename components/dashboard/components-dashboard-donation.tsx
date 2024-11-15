@@ -119,10 +119,10 @@ const ComponentsDashboardDonation = () => {
 
            <h3 className="my-3 text-center text-3xl">Donations</h3>
             <div className="slim-scroll container mx-auto overflow-hidden overflow-x-auto">
-                <table className="min-w-full border border-gray-300 bg-white">
+                <table className="min-w-full border border-gray-300 bg-white dark:bg-[#121e31]">
                     <thead>
                         <tr>
-                            <th className="border-b px-4 py-2 text-center">User Name</th>
+                            <th className="border-b px-4 py-2 text-center">Donor user Name</th>
                             <th className="border-b px-4 py-2 text-center">Organization Name</th>
                             <th className="border-b px-4 py-2 text-center">Organization Email</th>
                             <th className="border-b px-4 py-2 text-center">Point</th>
@@ -139,7 +139,9 @@ const ComponentsDashboardDonation = () => {
                                 <td className="border-b px-4 py-2 text-center">{item?.points}</td>
                                 <td className="border-b px-4 py-2 text-center">{item?.status}</td>
 
-                                <td className="flex items-center justify-center gap-2  text-center ">
+                                <td className="border-b px-4 py-2 text-center ">
+                                    <div className='flex items-center justify-center gap-2  text-center'>
+
                                     {item?.status === 'pending' ? (
                                         <div className="flex flex-col gap-3 sm:flex-row">
                                             <button onClick={() => handleReject(item._id)} className="rounded bg-red-500 px-3 py-1 text-white">
@@ -158,6 +160,7 @@ const ComponentsDashboardDonation = () => {
                                     ) : (
                                         ''
                                     )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}

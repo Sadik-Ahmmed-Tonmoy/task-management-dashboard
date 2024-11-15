@@ -72,13 +72,13 @@ const ComponentsAuthLoginForm = () => {
                 });
             }
         } catch (e) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                // title: 'Failed to create task',
-                text: (e as any)?.data?.success === false && (e as any)?.data?.errorSources[0]?.message,
-                showConfirmButton: true,
-            });
+            // Swal.fire({
+            //     position: 'top-end',
+            //     icon: 'error',
+            //     // title: 'Failed to create task',
+            //     text: (e as any)?.data?.success === false && (e as any)?.data?.errorSources[0]?.message,
+            //     showConfirmButton: true,
+            // });
         }
     };
 
@@ -107,10 +107,10 @@ const ComponentsAuthLoginForm = () => {
                 {errors.password && <span className="text-red-500">{errors.password.message}</span>}
             </div>
             <div>
-                <label className="flex cursor-pointer items-center">
+                {/* <label className="flex cursor-pointer items-center">
                     <input type="checkbox" className="form-checkbox bg-white dark:bg-black" />
                     <span className="text-white-dark">Subscribe to weekly newsletter</span>
-                </label>
+                </label> */}
             </div>
             <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                 Sign in

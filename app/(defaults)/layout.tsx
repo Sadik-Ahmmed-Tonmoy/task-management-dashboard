@@ -7,6 +7,7 @@ import ScrollToTop from '@/components/layouts/scroll-to-top';
 import Setting from '@/components/layouts/setting';
 import Sidebar from '@/components/layouts/sidebar';
 import Portals from '@/components/portals';
+import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -26,7 +27,10 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
                     {/* END SIDEBAR */}
                     <div className="main-content flex min-h-screen flex-col">
                         {/* BEGIN TOP NAVBAR */}
+                        <ProtectedRoute>
+
                         <Header />
+                        </ProtectedRoute>
                         {/* END TOP NAVBAR */}
 
                         {/* BEGIN CONTENT AREA */}

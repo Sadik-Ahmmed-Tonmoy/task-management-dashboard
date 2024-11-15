@@ -54,6 +54,7 @@ const ComponentsDashboardOrganization = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCreateOrganization, setIsCreateOrganization] = useState(false);
     const [updateId, setUpdateId] = useState<string | null>(null);
+    const [isView, setIsView] = useState<boolean>(false);
     const [selectedItemForUpdate, setSelectedItemForUpdate] = useState<Partial<Organization>>({});
     const { data: getAllOrganizationQuery, isLoading } = useGetAllOrganizationQuery(undefined);
     const [createOrganizationMutation] = useCreateOrganizationMutation();
@@ -193,6 +194,7 @@ const ComponentsDashboardOrganization = () => {
         setSelectedItemForUpdate({});
         setIsCreateOrganization(true);
         setIsModalOpen(true);
+        setIsView(false);
     };
 
     const openModalForEdit = (id: string) => {
@@ -225,33 +227,58 @@ const ComponentsDashboardOrganization = () => {
 
     return (
         <div>
-            <div className="mb-3 me-4 flex flex-col sm:flex-row justify-between items-center">
-            <div></div>
-            <h3 className="my-3 text-center text-3xl">Organization</h3>
+            <div className="mb-3 me-4 flex flex-col items-center justify-between sm:flex-row">
+                <div></div>
+                <h3 className="my-3 text-center text-3xl">Organization</h3>
                 <button onClick={openModalForCreate} className="w-fit rounded-lg bg-blue-500 px-4 py-2 text-white">
                     Create Organization
                 </button>
             </div>
-            <Modal title={isCreateOrganization ? 'Create Organization' : 'Update Organization'} open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
-                <MyFormWrapper
-                    key={isCreateOrganization ? 'create' : `edit-${updateId}-${JSON.stringify(selectedItemForUpdate)}`}
-                    onSubmit={isCreateOrganization ? handleSubmit : handleEditSubmit}
-                    validationSchema={organizationValidationSchema}
-                    defaultValues={defaultValues}
-                    className="mx-auto mb-4 mt-8 flex max-w-xl flex-col gap-3"
-                >
-                    <MyFormInputHTML name="name" label="Name" placeholder="Enter Your Coupon Code" />
-                    <MyFormInputHTML name="description" type="text" label="Organization" placeholder="Enter Discount" />
-                    <MyFormInputHTML name="email" type="email" label="Email" placeholder="Enter your email" />
-                    <MyFormImageUpload name="logo" label="Logo" />
-                    <MyFormImageUpload name="banner" label="Banner" />
-                    <button type="submit" className="rounded-lg bg-blue-500 px-4 py-2 text-white">
-                        Submit
-                    </button>
-                </MyFormWrapper>
+            <Modal title={isView ? 'View Details' : isCreateOrganization ? 'Create Organization' : 'Update Organization'} open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
+                {isView ? (
+                    <div className='flex flex-col gap-3'>
+                        <div>
+                            <h5 className="text-base font-semibold">Name</h5>
+                            <p>{selectedItemForUpdate?.name}</p>
+                        </div>
+                        <div>
+                            <h5 className="text-base font-semibold">Email</h5>
+                            <p>{selectedItemForUpdate?.email}</p>
+                        </div>
+                        <div>
+                            <h5 className="text-base font-semibold">Description</h5>
+                            <p>{selectedItemForUpdate?.description}</p>
+                        </div>
+                        <div>
+                            <h5 className="text-base font-semibold mb-1">Logo</h5>
+                            {selectedItemForUpdate.logo ? <Image src={selectedItemForUpdate.logo} height={200} width={200} alt="logo" /> : 'No Logo'}
+                        </div>
+                        <div>
+                            <h5 className="text-base font-semibold mb-1">Banner</h5>
+                            {selectedItemForUpdate.banner ? <Image src={selectedItemForUpdate.banner} height={200} width={200} alt="banner" /> : 'No Banner'}
+                        </div>
+                    </div>
+                ) : (
+                    <MyFormWrapper
+                        key={isCreateOrganization ? 'create' : `edit-${updateId}-${JSON.stringify(selectedItemForUpdate)}`}
+                        onSubmit={isCreateOrganization ? handleSubmit : handleEditSubmit}
+                        validationSchema={organizationValidationSchema}
+                        defaultValues={defaultValues}
+                        className="mx-auto mb-4 mt-8 flex max-w-xl flex-col gap-3"
+                    >
+                        <MyFormInputHTML name="name" label="Name" placeholder="Enter Your Coupon Code" />
+                        <MyFormInputHTML name="description" type="text" label="Organization" placeholder="Enter Discount" />
+                        <MyFormInputHTML name="email" type="email" label="Email" placeholder="Enter your email" />
+                        <MyFormImageUpload name="logo" label="Logo" />
+                        <MyFormImageUpload name="banner" label="Banner" />
+                        <button type="submit" className="rounded-lg bg-blue-500 px-4 py-2 text-white">
+                            Submit
+                        </button>
+                    </MyFormWrapper>
+                )}
             </Modal>
             <div className="slim-scroll container mx-auto overflow-hidden overflow-x-auto">
-                <table className="min-w-full border border-gray-300 bg-white">
+                <table className="min-w-full border border-gray-300 bg-white dark:bg-[#121e31]">
                     <thead>
                         <tr>
                             <th className="border-b px-4 py-2 text-center">Name</th>
@@ -269,14 +296,31 @@ const ComponentsDashboardOrganization = () => {
                                 <td className="border-b px-4 py-2 text-center"> {item.logo ? <Image src={item.logo} height={50} width={50} alt="logo" /> : 'No Logo'}</td>
                                 <td className="border-b px-4 py-2 text-center">{item.banner ? <Image src={item.banner} height={50} width={50} alt="banner" /> : 'No Banner'}</td>
                                 <td className="border-b px-4 py-2 text-center">{item?.email}</td>
-                                <td className="border-b px-4 py-2 text-center">{item?.description}</td>
-                                <td className="flex flex-col items-center justify-center gap-2  px-4 py-2 text-center sm:flex-row">
-                                    <button onClick={() => openModalForEdit(item._id)} className="mr-2 rounded bg-blue-500 px-3 py-1 text-white">
-                                        Edit
-                                    </button>
-                                    <button onClick={() => handleDelete(item._id)} className="rounded bg-red-500 px-3 py-1 text-white">
-                                        Delete
-                                    </button>
+                                <td className="border-b px-4 py-2 text-center"> {item?.description?.length > 30 ? `${item.description.slice(0, 30)}...` : item?.description}</td>
+                                <td className="border-b px-4 py-2 text-center">
+                                    <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
+                                        <button
+                                            onClick={() => {
+                                                openModalForEdit(item._id);
+                                                setIsView(true);
+                                            }}
+                                            className="mr-2 rounded bg-green-500 px-3 py-1 text-white"
+                                        >
+                                            View
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                openModalForEdit(item._id);
+                                                setIsView(false);
+                                            }}
+                                            className="mr-2 rounded bg-blue-500 px-3 py-1 text-white"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button onClick={() => handleDelete(item._id)} className="rounded bg-red-500 px-3 py-1 text-white">
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

@@ -37,6 +37,7 @@ import { MdOutlinePayments } from 'react-icons/md';
 import { RiCoupon2Line } from "react-icons/ri";
 import { SiAwsorganizations } from "react-icons/si";
 import { LiaDonateSolid } from 'react-icons/lia';
+import { BiSupport } from 'react-icons/bi';
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -194,31 +195,38 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link href="/finance" className="group">
+                                <Link href="/support" className="group">
                                     <div className="flex items-center">
                                         {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
+                                        <BiSupport className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Support')}</span>
+                                    </div>
+                                </Link>
+                            </li>
+                            {/* <li className="nav-item">
+                                <Link href="/finance" className="group">
+                                    <div className="flex items-center">
                                         <MdOutlinePayments className="shrink-0 group-hover:!text-primary" />
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('finance')}</span>
                                     </div>
                                 </Link>
-                            </li>
+                            </li> */}
                           
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <Link href="/crypto" className="group">
                                     <div className="flex items-center">
-                                        {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
                                         <MdOutlinePayments className="shrink-0 group-hover:!text-primary" />
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('crypto')}</span>
                                     </div>
                                 </Link>
-                            </li>
-
+                            </li> */}
+{/* 
                             <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                 <IconMinus className="hidden h-5 w-4 flex-none" />
                                 <span>{t('apps')}</span>
-                            </h2>
+                            </h2> */}
 
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <ul>
                                     <li className="nav-item">
                                         <Link href="/apps/chat" className="group">
@@ -793,7 +801,7 @@ const Sidebar = () => {
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('documentation')}</span>
                                     </div>
                                 </Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </PerfectScrollbar>
                 </div>

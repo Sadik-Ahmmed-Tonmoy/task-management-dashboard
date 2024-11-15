@@ -55,9 +55,19 @@ const authApi = baseApi.injectEndpoints({
         updateUser: builder.mutation({
             query: (userInfo) => {
                 return {
-                    url: 'users/update-my-profile',
+                    url: `admin/update-user-profile/${userInfo._id}`,
                     method: 'PATCH',
                     body: userInfo,
+                };
+            },
+            invalidatesTags: ['User'],
+        }),
+        deleteUser: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `admin/delete-user/${id}`,
+                    method: 'DELETE',
+                    // body: userInfo,
                 };
             },
             invalidatesTags: ['User'],
@@ -65,4 +75,4 @@ const authApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useGetUserDataQuery, useGetAllUsersQuery, useUpdateUserMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useGetUserDataQuery, useGetAllUsersQuery, useUpdateUserMutation, useDeleteUserMutation } = authApi;

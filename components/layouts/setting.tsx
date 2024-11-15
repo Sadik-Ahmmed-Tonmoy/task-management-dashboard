@@ -45,7 +45,7 @@ const Setting = () => {
                     <div className="mb-3 rounded-md border border-dashed border-white-light p-3 dark:border-[#1b2e4b]">
                         <h5 className="mb-1 text-base leading-none dark:text-white">Color Scheme</h5>
                         <p className="text-xs text-white-dark">Overall light or dark presentation.</p>
-                        <div className="mt-3 grid grid-cols-3 gap-2">
+                        <div className="mt-3 grid grid-cols-2 gap-2">
                             <button type="button" className={`${themeConfig.theme === 'light' ? 'btn-primary' : 'btn-outline-primary'} btn`} onClick={() => dispatch(toggleTheme('light'))}>
                                 <IconSun className="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2" />
                                 Light
@@ -56,10 +56,10 @@ const Setting = () => {
                                 Dark
                             </button>
 
-                            <button type="button" className={`${themeConfig.theme === 'system' ? 'btn-primary' : 'btn-outline-primary'} btn`} onClick={() => dispatch(toggleTheme('system'))}>
+                            {/* <button type="button" className={`${themeConfig.theme === 'system' ? 'btn-primary' : 'btn-outline-primary'} btn`} onClick={() => dispatch(toggleTheme('system'))}>
                                 <IconLaptop className="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2" />
                                 System
-                            </button>
+                            </button> */}
                         </div>
                     </div>
 

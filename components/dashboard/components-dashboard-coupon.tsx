@@ -210,7 +210,7 @@ const ComponentsDashboardCoupon = () => {
                 </MyFormWrapper>
             </Modal>
             <div className="slim-scroll container mx-auto overflow-hidden overflow-x-auto">
-                <table className="min-w-full border border-gray-300 bg-white">
+                <table className="min-w-full border border-gray-300 bg-white dark:bg-[#121e31]">
                     <thead>
                         <tr>
                             <th className="border-b px-4 py-2 text-center">Code</th>
@@ -228,13 +228,15 @@ const ComponentsDashboardCoupon = () => {
                                 {/* <td className="border-b px-4 py-2 text-center">{new Date(coupon.expirationDate).toLocaleDateString()}</td> */}
                                 <td className="border-b px-4 py-2 text-center">{dayjs(coupon?.expirationDate, 'YYYY-MM-DD').format('YYYY-MM-DD')}</td>
                                 <td className="border-b px-4 py-2 text-center">{coupon?.availability === true ? 'Available' : 'Unavailable'}</td>
-                                <td className="flex flex-col items-center justify-center gap-2 border-b px-4 py-2 text-center sm:flex-row">
-                                    <button onClick={() => openModalForEdit(coupon._id)} className="mr-2 rounded bg-blue-500 px-3 py-1 text-white">
+                                <td className="border-b px-4 py-2 text-center ">
+                                 <div className='flex flex-col sm:flex-row items-center justify-center gap-2'>
+                                 <button onClick={() => openModalForEdit(coupon._id)} className="mr-2 rounded bg-blue-500 px-3 py-1 text-white">
                                         Edit
                                     </button>
                                     <button onClick={() => handleDelete(coupon._id)} className="rounded bg-red-500 px-3 py-1 text-white">
                                         Delete
                                     </button>
+                                 </div>
                                 </td>
                             </tr>
                         ))}

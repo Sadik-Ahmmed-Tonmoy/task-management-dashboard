@@ -15,7 +15,10 @@ const PointsDistributionChart = () => {
     const [isMounted, setIsMounted] = useState(false);
     const { data, isLoading, isSuccess, error, isError} = useGetPointsDistributionQuery(undefined)
     
-
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+    }, []);
   
     useEffect(() => {
         if (isError) {
