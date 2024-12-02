@@ -4,6 +4,7 @@ import '../styles/tailwind.css';
 import { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import ProviderComponent from '@/components/layouts/provider-component';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
     title: {
@@ -22,7 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={nunito.variable}>
-                <ProviderComponent>{children}</ProviderComponent>
+                <ProviderComponent>
+                <Toaster />
+                {children}</ProviderComponent>
             </body>
         </html>
     );

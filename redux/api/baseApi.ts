@@ -3,7 +3,7 @@ import { addTokenToLocalStorage, getTokenFromLocalStorage } from "@/utils/tokenH
 import { createApi, fetchBaseQuery,BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: "https://watch-points.vercel.app/api/",
+    baseUrl: "https://gutter-clean.vercel.app/api/",
     credentials: "include",
     prepareHeaders: (headers) => {
         const token = getTokenFromLocalStorage();
@@ -24,7 +24,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<string | FetchArgs, unknown, FetchB
   
     if (result.error?.status === 401) {
       try {
-        const res = await fetch("https://watch-points.vercel.app/api/auth/refresh-token", {
+        const res = await fetch("https://gutter-clean.vercel.app/api/auth/refresh-token", {
           method: "POST",
           // credentials: "include", // Sends cookies with the request
           headers: {
@@ -57,6 +57,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<string | FetchArgs, unknown, FetchB
 export const baseApi = createApi({
     reducerPath: "baseApi",
     baseQuery: baseQueryWithRefreshToken,
-    tagTypes: ["User", "Task", "Payment", "Statistics", "ActiveUser", "Coupon", "Organization", "Donation", "Support"],	
+    tagTypes: ["User", "Blog", "NewsLetter", "support", "serviceArea"],	
     endpoints: () => ({}),
 });
