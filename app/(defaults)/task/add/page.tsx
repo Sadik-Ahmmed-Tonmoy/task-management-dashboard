@@ -4,7 +4,7 @@ import React from 'react';
 const addTaskPage = () => {
     return (
         <div>
-            <ComponentsDashboardAddTask />
+            <ComponentsDashboardAddTask /> 
         </div>
     );
 };
