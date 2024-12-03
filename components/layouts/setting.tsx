@@ -67,7 +67,7 @@ const Setting = () => {
                         <h5 className="mb-1 text-base leading-none dark:text-white">Navigation Position</h5>
                         <p className="text-xs text-white-dark">Select the primary navigation paradigm for your app.</p>
                         <div className="mt-3 grid grid-cols-3 gap-2">
-                            <button
+                            {/* <button
                                 type="button"
                                 className={`${themeConfig.menu === 'horizontal' ? 'btn-primary' : 'btn-outline-primary'} btn`}
                                 onClick={() => {
@@ -76,7 +76,7 @@ const Setting = () => {
                                 }}
                             >
                                 Horizontal
-                            </button>
+                            </button> */}
 
                             <button
                                 type="button"
