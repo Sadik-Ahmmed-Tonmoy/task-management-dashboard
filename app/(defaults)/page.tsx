@@ -1,12 +1,22 @@
-import GetAllBlogs from '@/components/GetAllBlogs/GetAllBlogs';
+
+import ActiveUserStatisticsChart from '@/components/components/ActiveUserStatisticsChart/ActiveUserStatisticsChart';
+import PointDistributionChart from '@/components/components/PointDistributionChart';
+import StatisticsChart from '@/components/components/StatisticsChart/StatisticsChart';
+
 import React, { useEffect } from 'react';
 
-const HomePage = () => {
+
+
+const Sales = () => {
+
     return (
         <>
-            <GetAllBlogs />
+            <ActiveUserStatisticsChart />
+            <StatisticsChart />
+            <PointDistributionChart />
+            {/* <ComponentsDashboardSales /> */}
         </>
     );
 };
 
-export default HomePage;
+export default Sales;

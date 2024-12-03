@@ -1,26 +1,43 @@
 'use client';
-import IconCaretsDown from '@/components/icon/icon-carets-down';
-import { getTranslation } from '@/i18n';
-import { IRootState } from '@/store';
-import { toggleSidebar } from '@/store/themeConfigSlice';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { BiSupport } from 'react-icons/bi';
-import { FaBloggerB, FaRegNewspaper } from 'react-icons/fa';
-import { LiaDonateSolid } from 'react-icons/lia';
-import { RiBloggerLine } from 'react-icons/ri';
-import { SiAwsorganizations } from "react-icons/si";
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
-import logo from "@/assets/logo.png"
-
-import { IconCaretDown } from '@tabler/icons-react';
+import Link from 'next/link';
+import { toggleSidebar } from '@/store/themeConfigSlice';
 import AnimateHeight from 'react-animate-height';
-import IconMenuDashboard from '../icon/menu/icon-menu-dashboard';
-import Image from 'next/image';
-import { PiMapPinAreaBold } from 'react-icons/pi';
-import { BsChatRightQuote } from 'react-icons/bs';
+import { IRootState } from '@/store';
+import { useState, useEffect } from 'react';
+import IconCaretsDown from '@/components/icon/icon-carets-down';
+import IconMenuDashboard from '@/components/icon/menu/icon-menu-dashboard';
+import IconCaretDown from '@/components/icon/icon-caret-down';
+import IconMinus from '@/components/icon/icon-minus';
+import IconMenuChat from '@/components/icon/menu/icon-menu-chat';
+import IconMenuMailbox from '@/components/icon/menu/icon-menu-mailbox';
+import IconMenuTodo from '@/components/icon/menu/icon-menu-todo';
+import IconMenuNotes from '@/components/icon/menu/icon-menu-notes';
+import IconMenuScrumboard from '@/components/icon/menu/icon-menu-scrumboard';
+import IconMenuContacts from '@/components/icon/menu/icon-menu-contacts';
+import IconMenuInvoice from '@/components/icon/menu/icon-menu-invoice';
+import IconMenuCalendar from '@/components/icon/menu/icon-menu-calendar';
+import IconMenuComponents from '@/components/icon/menu/icon-menu-components';
+import IconMenuElements from '@/components/icon/menu/icon-menu-elements';
+import IconMenuCharts from '@/components/icon/menu/icon-menu-charts';
+import IconMenuWidgets from '@/components/icon/menu/icon-menu-widgets';
+import IconMenuFontIcons from '@/components/icon/menu/icon-menu-font-icons';
+import IconMenuDragAndDrop from '@/components/icon/menu/icon-menu-drag-and-drop';
+import IconMenuTables from '@/components/icon/menu/icon-menu-tables';
+import IconMenuDatatables from '@/components/icon/menu/icon-menu-datatables';
+import IconMenuForms from '@/components/icon/menu/icon-menu-forms';
+import IconMenuUsers from '@/components/icon/menu/icon-menu-users';
+import IconMenuPages from '@/components/icon/menu/icon-menu-pages';
+import IconMenuAuthentication from '@/components/icon/menu/icon-menu-authentication';
+import IconMenuDocumentation from '@/components/icon/menu/icon-menu-documentation';
+import { usePathname } from 'next/navigation';
+import { getTranslation } from '@/i18n';
+import { MdOutlinePayments } from 'react-icons/md';
+import { RiCoupon2Line } from "react-icons/ri";
+import { SiAwsorganizations } from "react-icons/si";
+import { LiaDonateSolid } from 'react-icons/lia';
+import { BiSupport } from 'react-icons/bi';
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -78,8 +95,8 @@ const Sidebar = () => {
                 <div className="h-full bg-white dark:bg-black">
                     <div className="flex items-center justify-between px-4 py-3">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <Image className="ml-[5px] w-8 flex-none" src={logo?logo:"/assets/images/logo.svg"}  alt="logo" />
-                            <span className="align-middle text-2xl font-semibold dark:text-white-light lg:inline ltr:ml-1.5 rtl:mr-1.5">Gutter Cleaning </span>
+                            <img className="ml-[5px] w-8 flex-none" src="/assets/images/logo.svg" alt="logo" />
+                            <span className="align-middle text-2xl font-semibold dark:text-white-light lg:inline ltr:ml-1.5 rtl:mr-1.5">VRISTO</span>
                         </Link>
 
                         <button
@@ -122,82 +139,47 @@ const Sidebar = () => {
                                 </AnimateHeight>
                             </li> */}
                             <li className="menu nav-item">
-                                <button type="button" className={`${currentMenu === 'blog' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('blog')}>
+                                <button type="button" className={`${currentMenu === 'adminDashboard' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('adminDashboard')}>
                                     <div className="flex items-center">
-                                        <RiBloggerLine className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Blog')}</span>
+                                        <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Admin Dashboard')}</span>
                                     </div>
 
-                                    <div className={currentMenu !== 'blog' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                    <div className={currentMenu !== 'adminDashboard' ? '-rotate-90 rtl:rotate-90' : ''}>
                                         <IconCaretDown />
                                     </div>
                                 </button>
 
-                                <AnimateHeight duration={300} height={currentMenu === 'blog' ? 'auto' : 0}>
+                                <AnimateHeight duration={300} height={currentMenu === 'adminDashboard' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
-                                            <Link href="/blog">{t('All Blogs')}</Link>
+                                            <Link href="/users/all">{t('All Users')}</Link>
                                         </li>
                                         <li>
-                                            <Link href="/blog/create">{t('Create Blog')}</Link>
+                                            <Link href="/task/all">{t('All Tasks')}</Link>
                                         </li>
-                                        {/* <li>
+                                        <li>
                                             <Link href="/task/add">{t('Add Task')}</Link>
                                         </li>
                                         <li>
                                             <Link href="/payment">{t('Payment')}</Link>
-                                        </li> */}
-                                    </ul>
-                                </AnimateHeight>
-                            </li>
-                            <li className="menu nav-item">
-                                <button type="button" className={`${currentMenu === 'NewsLetter' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('NewsLetter')}>
-                                    <div className="flex items-center">
-                                        <FaRegNewspaper className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('News Letter')}</span>
-                                    </div>
-
-                                    <div className={currentMenu !== 'NewsLetter' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-
-                                <AnimateHeight duration={300} height={currentMenu === 'NewsLetter' ? 'auto' : 0}>
-                                    <ul className="sub-menu text-gray-500">
-                                        <li>
-                                            <Link href="/news-letter">{t('All Subscriptions For News Letters')}</Link>
                                         </li>
-                                        <li>
-                                            <Link href="/news-letter/send-mail">{t('Send Mail To All Subscribers')}</Link>
-                                        </li>
-                                        {/* <li>
-                                            <Link href="/task/add">{t('Add Task')}</Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/payment">{t('Payment')}</Link>
-                                        </li> */}
                                     </ul>
                                 </AnimateHeight>
                             </li>
                             <li className="nav-item">
-                                <Link href="/all-quote" className="group">
+                                <Link href="/coupon" className="group">
                                     <div className="flex items-center">
-                                        <BsChatRightQuote className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('All Quote')}</span>
+                                        {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
+                                        <RiCoupon2Line className="shrink-0 group-hover:!text-primary" />
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Coupon')}</span>
                                     </div>
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link href="/areas-we-serve" className="group">
-                                    <div className="flex items-center">
-                                        <PiMapPinAreaBold className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Areas We Serve')}</span>
-                                    </div>
-                                </Link>
-                            </li>
-                            {/* <li className="nav-item">
                                 <Link href="/organization" className="group">
                                     <div className="flex items-center">
+                                        {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
                                         <SiAwsorganizations className="shrink-0 group-hover:!text-primary" />
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Organization')}</span>
                                     </div>
@@ -206,6 +188,7 @@ const Sidebar = () => {
                             <li className="nav-item">
                                 <Link href="/donations" className="group">
                                     <div className="flex items-center">
+                                        {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
                                         <LiaDonateSolid className="shrink-0 group-hover:!text-primary" />
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Donations')}</span>
                                     </div>
@@ -214,11 +197,12 @@ const Sidebar = () => {
                             <li className="nav-item">
                                 <Link href="/support" className="group">
                                     <div className="flex items-center">
-                                        <RiBloggerLine className="shrink-0 group-hover:!text-primary" />
+                                        {/* <IconMenuChat className="shrink-0 group-hover:!text-primary" /> */}
+                                        <BiSupport className="shrink-0 group-hover:!text-primary" />
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Support')}</span>
                                     </div>
                                 </Link>
-                            </li> */}
+                            </li>
                             {/* <li className="nav-item">
                                 <Link href="/finance" className="group">
                                     <div className="flex items-center">

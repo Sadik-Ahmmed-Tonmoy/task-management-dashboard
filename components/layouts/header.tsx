@@ -34,9 +34,7 @@ import IconMenuMore from '@/components/icon/menu/icon-menu-more';
 import { usePathname, useRouter } from 'next/navigation';
 import { getTranslation } from '@/i18n';
 import { removeTokenFromLocalStorage } from '@/utils/tokenHandler';
-
-import logo from "@/assets/logo.png"
-import Image from 'next/image';
+import { useGetUserDataQuery } from '@/redux/features/auth/authApi';
 
 const Header = () => {
     const pathname = usePathname();
@@ -149,7 +147,7 @@ const Header = () => {
 
     const [search, setSearch] = useState(false);
 
-  
+    const {data : userData, isLoading} = useGetUserDataQuery(undefined)
 
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
@@ -157,8 +155,8 @@ const Header = () => {
                 <div className="relative flex w-full items-center justify-end bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <Image className="inline w-8 ltr:-ml-1 rtl:-mr-1" src={logo?logo:"/assets/images/logo.svg"} alt="logo" />
-                            <span className="hidden align-middle text-2xl  font-semibold  transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">Gutter Cleaning</span>
+                            <img className="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo.svg" alt="logo" />
+                            <span className="hidden align-middle text-2xl  font-semibold  transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">VRISTO</span>
                         </Link>
                         <button
                             type="button"
@@ -432,12 +430,12 @@ const Header = () => {
                                             </div>
                                         </div>
                                     </li> */}
-                                    {/* <li>
+                                    <li>
                                         <Link href="/users/profile" className="dark:hover:text-white">
                                             <IconUser className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
                                             Profile
                                         </Link>
-                                    </li> */}
+                                    </li>
                                     {/* <li>
                                         <Link href="/apps/mailbox" className="dark:hover:text-white">
                                             <IconMail className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
